@@ -32,4 +32,5 @@ public class Word
     public String getSkillLevel() { return skillLevel; }
     public void setWordType(String WordTye) { this.wordType = wordType; }
     public String getWordType() { return wordType; }
+    public boolean equals(Word w) { return w.getWord().equals(this.word); }
 }
