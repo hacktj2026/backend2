@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class HacktjApplication {
     public static void main(String[] args) {
+      
       SpringApplication.run(HacktjApplication.class, args);
     }
     @GetMapping("/hello")

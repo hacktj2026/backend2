@@ -14,6 +14,7 @@ public class Word
     private String skillLevel;
     private String wordType;
     private String meaning;
+    private int runningAccuracy;
 
     public Word(String id, String word, int timesUsed, String skillLevel, String wordType, String meaning)
     {
@@ -24,6 +25,8 @@ public class Word
         this.wordType = wordType;
         this.meaning = meaning;
     }
+
+
     public void setId(String id) { this.id = id; }
     public String getId() { return id; }
     public void setWord(String word) { this.word = word; }
