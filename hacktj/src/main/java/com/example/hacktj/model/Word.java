@@ -25,6 +25,8 @@ public class Word
         this.meaning = meaning;
         this.level = level;
     }
+
+
     public void setId(String id) { this.id = id; }
     public String getId() { return id; }
     public void setWord(String word) { this.word = word; }

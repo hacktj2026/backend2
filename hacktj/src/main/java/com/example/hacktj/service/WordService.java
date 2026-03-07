@@ -76,6 +76,14 @@ public class WordService {
         if(skill.equals("C1")) return 85;
         return 101;
     }
+    public void setUser(User user) { this.user = user; }
+    public void recordAnswer(String wordId, boolean correct) {
+        Word word = wordRepository.findById(wordId).orElse(null);
+        if (word != null) {
+            word.setTimesUsed(word.getTimesUsed() + 1);
+            wordRepository.save(word);
+        }
+    }
     public class WordEntry
     {
         private String spanish;
