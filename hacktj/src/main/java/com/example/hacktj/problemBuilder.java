@@ -21,7 +21,7 @@ public class problemBuilder {
             // Place spanish_vocab.json in src/main/resources/
             InputStream is = problemBuilder.class
                     .getClassLoader()
-                    .getResourceAsStream("spanish_vocab.json");
+                    .getResourceAsStream("spv.json");
             vocabData = mapper.readTree(is);
         } catch (Exception e) {
             throw new RuntimeException("Failed to load vocab JSON", e);
