@@ -10,8 +10,6 @@ import com.example.hacktj.repository.WordRepository;
 import java.util.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.annotation.PostConstruct;
-import java.io.File;
 import java.io.InputStream;
 
 @Service
@@ -63,7 +61,7 @@ public class WordService {
         return word;
     }
     public void rightOrWrong(boolean answer, int level) {
-        HashMap<String, Integer> skills = updateSkillLevel(last, answer);
+        HashMap<String, Integer> skills = user.updateSkillLevel(last, answer);
         List<Word> words = wordRepository.findByLevel(level);
         for(Word word : words)
             if(convertSkillLevel(word.getSkillLevel()) < skills.get(word.getWordType()))
