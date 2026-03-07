@@ -37,6 +37,7 @@ public class conjugation {
         wordStr += ending;
         return wordStr;
     }
+
     public static String conjugateConditional(Word word, String pronoun) {
         String wordStr = word.getWord();
         
@@ -67,6 +68,43 @@ public class conjugation {
         }
 
         wordStr += ending;
+        return wordStr;
+    }
+
+    public String conjugatePresentNoIrregular(Word word, String pronoun) {
+        String wordStr = word.getWord();
+        String ending = "";
+
+        if (wordStr.endsWith("ar")) {
+            switch (pronoun) {
+                case "yo": ending = "o"; break;
+                case "tú": ending = "as"; break;
+                case "él/ella/usted": ending = "a"; break;
+                case "nosotros/nosotras": ending = "amos"; break;
+                case "vosotros/vosotras": ending = "áis"; break;
+                case "ellos/ellas/ustedes": ending = "an"; break;
+            }
+        } else if (wordStr.endsWith("er")) {
+            switch (pronoun) {
+                case "yo": ending = "o"; break;
+                case "tú": ending = "es"; break;
+                case "él/ella/usted": ending = "e"; break;
+                case "nosotros/nosotras": ending = "emos"; break;
+                case "vosotros/vosotras": ending = "éis"; break;
+                case "ellos/ellas/ustedes": ending = "en"; break;
+            }
+        } else if (wordStr.endsWith("ir")) {
+            switch (pronoun) {
+                case "yo": ending = "o"; break;
+                case "tú": ending = "es"; break;
+                case "él/ella/usted": ending = "e"; break;
+                case "nosotros/nosotras": ending = "imos"; break;
+                case "vosotros/vosotras": ending = "ís"; break;
+                case "ellos/ellas/ustedes": ending = "en"; break;
+            }
+        }
+
+        wordStr = wordStr.substring(0, wordStr.length() - 2) + ending;
         return wordStr;
     }
 }
