@@ -31,7 +31,7 @@ public class User {
         return skill;
     }
 
-    public void updateSkill(Word word, boolean isCorrect) {
+    public int updateSkill(Word word, boolean isCorrect) {
         int WordSkill = skillNum(word.getSkillLevel());
         boolean bigger = WordSkill > skill;
         int change = (int)Math.sqrt(WordSkill * WordSkill - skill * skill)/2;
@@ -48,6 +48,7 @@ public class User {
               skill -= change;
         }
 
+        return skill;
     }
 
     public int skillNum(String s)
