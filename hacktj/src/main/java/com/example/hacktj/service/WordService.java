@@ -7,6 +7,9 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import com.example.hacktj.model.Word;
 import com.example.hacktj.repository.WordRepository;
+import java.util.*;
+import com.example.hacktj.model.User;
+import jakarta.annotation.PostConstruct;
 
 @Service
 public class WordService {
@@ -15,8 +18,27 @@ public class WordService {
     @Autowired
     WordRepository wordRepository;
 
+    int max = 10;
     Word last = null;
+    Scanner scan;
 
+    @PostConstruct
+    public void setUp() {
+        try {
+            scan = new Scanner(getClass().getResourceAsStream("/vocabulary.txt"));
+            addWords();
+        }
+        catch(Exception e) {
+            System.out.println("Error");
+        }
+    }
+    public void addWords() {
+        long size = wordRepository.count();
+        for(long a = size; a < max; a++) {
+            String[] sarr = scan.nextLine().split(" ");
+            wordRepository.save(new Word(sarr[0], sarr[2], sarr[1], sarr[3], 1));
+        }
+    }
     public Word getNext(int level) {
         Query countQuery = new Query(Criteria.where("level").is(level));
         long count = mongoTemplate.count(countQuery, Word.class);
@@ -42,7 +64,23 @@ public class WordService {
         last = word;
         return word;
     }
-
+    public void rightOrWrong(boolean answer, int level, User user) {
+        int skill = user.updateSkill(last, answer);
+        List<Word> words = wordRepository.findByLevel(level);
+        for(Word word : words)
+            if(convertSkillLevel(word.getSkillLevel()) < skill)
+                wordRepository.delete(word);
+        addWords();
+    }
+    private int convertSkillLevel(String skill) {
+        if(skill.equals("A1")) return 17;
+        if(skill.equals("A2")) return 34;
+        if(skill.equals("B1")) return 51;
+        if(skill.equals("B2")) return 68;
+        if(skill.equals("C1")) return 85;
+        return 101;
+    }
+    public void setMax(int max) { this.max = max; }
     public void recordAnswer(String wordId, boolean correct) {
         Word word = wordRepository.findById(wordId).orElse(null);
         if (word != null) {
