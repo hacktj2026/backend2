@@ -36,4 +36,12 @@ public class WordService {
     last = word;
     return word;
     }
+
+    public void recordAnswer(String wordId, boolean correct) {
+        Word word = wordRepository.findById(wordId).orElse(null);
+        if (word != null) {
+            word.setTimesUsed(word.getTimesUsed() + 1);
+            wordRepository.save(word);
+        }
+    }
 }

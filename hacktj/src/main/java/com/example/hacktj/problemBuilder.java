@@ -1,4 +1,4 @@
-gotpackage com.example.hacktj;
+package com.example.hacktj;
 
 import com.example.hacktj.model.Word;
 import com.fasterxml.jackson.databind.JsonNode;
