@@ -14,7 +14,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class HacktjApplication {
   @Autowired
   WordService wordService;
-
   public static void main(String[] args) {
     SpringApplication.run(HacktjApplication.class, args);
   }

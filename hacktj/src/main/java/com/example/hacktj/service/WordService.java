@@ -18,14 +18,12 @@ public class WordService {
     @Autowired
     WordRepository wordRepository;
 
-    User user;
     int max = 10;
     Word last = null;
     Scanner scan;
 
-    public void setUp(int m, User user) throws Exception {
+    public void setUp(int m) throws Exception {
         max = m;
-        this.user = user;
         scan = new Scanner(new File("hacktj\\src\\main\\resources\\vocabulary.txt"));
         addWords();
     }
@@ -54,7 +52,7 @@ public class WordService {
         last = word;
         return word;
     }
-    public void rightOrWrong(boolean answer, int level) {
+    public void rightOrWrong(boolean answer, int level, User user) {
         int skill = user.updateSkill(last, answer);
         List<Word> words = wordRepository.findByLevel(level);
         for(Word word : words)
@@ -70,7 +68,6 @@ public class WordService {
         if(skill.equals("C1")) return 85;
         return 101;
     }
-    public void setUser(User user) { this.user = user; }
     public void setMax(int max) { this.max = max; }
     public void recordAnswer(String wordId, boolean correct) {
         Word word = wordRepository.findById(wordId).orElse(null);
