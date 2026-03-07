@@ -1,4 +1,10 @@
-package com.example.hacktj;
+gotpackage com.example.hacktj;
+
+import com.example.hacktj.model.Word;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 
 import java.io.InputStream;
 import java.util.ArrayList;

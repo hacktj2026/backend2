@@ -52,22 +52,4 @@ public class WordService {
         last = word;
         return word;
     }
-    public void rightOrWrong(boolean answer) {
-        HashMap<String, Integer> = user.updateSkill(last, answer);
-        List<Word> words = wordRepository.findAll();
-        for(Word w : words)
-            if(convertSkill(w.getSkillLevel()) < user.getSkillLevel())
-                wordRepository.delete(w);
-        List<Word> l1words = wordRepository.findByLevel("1");
-        if(l1words.size() > max)
-            while()
-    }
-    public void updateUser(User user) {
-        this.user = user;
-    }
-    public void updateCache();
-    private int convertSkill(String s) {
-        return -1;
-    }
-    public void setMax(int max) { this.max = max; }
 }
