@@ -14,6 +14,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class HacktjApplication {
   @Autowired
   WordService wordService;
+  
+  private static final ObjectMapper mapper = new ObjectMapper();
 
   public static void main(String[] args) {
     SpringApplication.run(HacktjApplication.class, args);
@@ -23,18 +25,21 @@ public class HacktjApplication {
   @GetMapping("/problem")
   public ProblemResponse getProblem(@RequestParam(value = "level", defaultValue = "1") int level) throws Exception {
     Word word = wordService.getNext(level);
+    if (word == null) {
+      throw new Exception("No word found for level " + level);
+    }
+    
     problemBuilder builder = new problemBuilder(word);
     String problemJson = builder.problem();
-    
-    // Parse the problem JSON
-    ObjectMapper mapper = new ObjectMapper();
     var problemData = mapper.readTree(problemJson);
+    
+    String[] choices = mapper.convertValue(problemData.get("choices"), String[].class);
     
     return new ProblemResponse(
       word.getId(),
       problemData.get("question").asText(),
       problemData.get("correctAnswer").asText(),
-      mapper.convertValue(problemData.get("choices"), String[].class),
+      choices,
       word.getSkillLevel()
     );
   }
@@ -42,12 +47,16 @@ public class HacktjApplication {
   // Check if the answer is correct
   @PostMapping("/check-answer")
   public AnswerResponse checkAnswer(@RequestBody AnswerRequest request) {
-    boolean correct = request.getSelected().equals(request.getCorrectAnswer());
-    wordService.recordAnswer(request.getWordId(), correct);
-    return new AnswerResponse(correct, request.getCorrectAnswer());
+    if (request == null || request.wordId == null) {
+      return new AnswerResponse(false);
+    }
+    
+    boolean correct = request.selected != null && request.selected.equals(request.correctAnswer);
+    wordService.recordAnswer(request.wordId, correct);
+    return new AnswerResponse(correct);
   }
 
-  // Response DTOs for cleaner JSON serialization
+  // Response DTOs
   public static class ProblemResponse {
     public String wordId;
     public String question;
@@ -55,6 +64,8 @@ public class HacktjApplication {
     public String[] choices;
     public String level;
 
+    public ProblemResponse() {}
+    
     public ProblemResponse(String wordId, String question, String correctAnswer, String[] choices, String level) {
       this.wordId = wordId;
       this.question = question;
@@ -66,11 +77,11 @@ public class HacktjApplication {
 
   public static class AnswerResponse {
     public boolean correct;
-    public String correctAnswer;
 
-    public AnswerResponse(boolean correct, String correctAnswer) {
+    public AnswerResponse() {}
+    
+    public AnswerResponse(boolean correct) {
       this.correct = correct;
-      this.correctAnswer = correctAnswer;
     }
   }
 
@@ -79,8 +90,10 @@ public class HacktjApplication {
     public String selected;
     public String correctAnswer;
 
-    public String getWordId() { return wordId; }
-    public String getSelected() { return selected; }
-    public String getCorrectAnswer() { return correctAnswer; }
+    public AnswerRequest() {}
+    
+    public void setWordId(String wordId) { this.wordId = wordId; }
+    public void setSelected(String selected) { this.selected = selected; }
+    public void setCorrectAnswer(String correctAnswer) { this.correctAnswer = correctAnswer; }
   }
 }
