@@ -10,7 +10,6 @@ import com.example.hacktj.repository.WordRepository;
 
 @Service
 public class WordService {
-
     @Autowired
     MongoTemplate mongoTemplate;
     @Autowired
