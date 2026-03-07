@@ -2,10 +2,19 @@ package com.example.hacktj.model;
 
 public class User {
     public int skill;
-    
+    public String name;
+    public String password;
+
     public User() {
         skill = 0;
+        name = "";
+        password = "";
+    }
 
+    public User(String name, String password) {
+        this.name = name;
+        this.password = password;
+        skill = 0;
     }
 
     public int getSkill() {
@@ -13,7 +22,22 @@ public class User {
     }
 
     public void updateSkill(Word word, boolean isCorrect) {
-        
+        int WordSkill = skillNum(word.getSkillLevel());
+        boolean bigger = WordSkill > skill;
+        int change = (int)Math.sqrt(WordSkill * WordSkill - skill * skill)/2;
+        if(isCorrect) {
+            if(bigger)
+             skill += change; 
+            else
+             skill += Math.log(change);
+        } 
+        else {
+            if(bigger)
+             skill -= Math.log(change);
+            else
+              skill -= change;
+        }
+
     }
 
     public int skillNum(String s)
