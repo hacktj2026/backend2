@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import com.example.hacktj.model.Word;
 import com.example.hacktj.repository.WordRepository;
 import java.util.*;
-import java.io.File;
 import com.example.hacktj.model.User;
+import jakarta.annotation.PostConstruct;
 
 @Service
 public class WordService {
@@ -22,10 +22,15 @@ public class WordService {
     Word last = null;
     Scanner scan;
 
-    public void setUp(int m) throws Exception {
-        max = m;
-        scan = new Scanner(new File("hacktj\\src\\main\\resources\\vocabulary.txt"));
-        addWords();
+    @PostConstruct
+    public void setUp() {
+        try {
+            scan = new Scanner(getClass().getResourceAsStream("/vocabulary.txt"));
+            addWords();
+        }
+        catch(Exception e) {
+            System.out.println("Error");
+        }
     }
     public void addWords() {
         long size = wordRepository.count();
