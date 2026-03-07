@@ -8,9 +8,7 @@ import org.springframework.stereotype.Service;
 import com.example.hacktj.model.Word;
 import com.example.hacktj.repository.WordRepository;
 import java.util.*;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.InputStream;
+import java.io.File;
 
 @Service
 public class WordService {
@@ -22,24 +20,19 @@ public class WordService {
     User user;
     int max = 10;
     Word last = null;
+    Scanner scan;
 
-    public void setUp(int m) throws Exception {
+    public void setUp(int m, User user) throws Exception {
         max = m;
-        ObjectMapper mapper = new ObjectMapper();
-        InputStream input = getClass().getResourceAsStream("/words.json");
-        Map<String, Map<String, List<WordEntry>>> data = mapper.readValue(input,new TypeReference<Map<String, Map<String, List<WordEntry>>>>() {});
-        int count = 0;
-        for (String level : data.keySet()) {
-            Map<String, List<WordEntry>> wordTypes = data.get(level);
-            for (String wordType : wordTypes.keySet()) {
-                List<WordEntry> words = wordTypes.get(wordType);
-                for (WordEntry entry : words) {
-                    if(count > max) break;
-                    Word word = new Word(entry.getSpanish(), 0, level, wordType, entry.getEnglish(), 0);
-                    wordRepository.save(word);
-                    count++;
-                }
-            }
+        this.user = user;
+        scan = new Scanner(new File("hacktj\\src\\main\\resources\\vocabulary.txt"));
+        addWords();
+    }
+    public void addWords() {
+        long size = wordRepository.count();
+        for(long a = size; a < max; a++) {
+            String[] sarr = scan.nextLine().split(" ");
+            wordRepository.save(new Word(sarr[0], sarr[2], sarr[1], sarr[3], 1));
         }
     }
     public Word getNext(int level) {
@@ -66,7 +59,7 @@ public class WordService {
         for(Word word : words)
             if(convertSkillLevel(word.getSkillLevel()) < skills.get(word.getWordType()))
                 wordRepository.delete(word);
-                
+        addWords();
     }
     private int convertSkillLevel(String skill) {
         if(skill.equals("A1")) return 17;
@@ -77,6 +70,7 @@ public class WordService {
         return 101;
     }
     public void setUser(User user) { this.user = user; }
+    public void setMax(int max) { this.max = max; }
     public void recordAnswer(String wordId, boolean correct) {
         Word word = wordRepository.findById(wordId).orElse(null);
         if (word != null) {

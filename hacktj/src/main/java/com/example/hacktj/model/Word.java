@@ -10,16 +10,15 @@ public class Word
     private String id;
 
     private String word;
-    private int timesUsed;
+    private int timesUsed = 0;
     private String skillLevel;
     private String wordType;
     private String meaning;
     private int level;
 
-    public Word(String word, int timesUsed, String skillLevel, String wordType, String meaning, int level)
+    public Word(String word, String skillLevel, String wordType, String meaning, int level)
     {
         this.word = word;
-        this.timesUsed = timesUsed;
         this.skillLevel = skillLevel;
         this.wordType = wordType;
         this.meaning = meaning;
