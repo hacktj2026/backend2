@@ -4,16 +4,26 @@ public class User {
     public int skill;
     public String name;
     public String password;
+    public String email;
 
     public User() {
         skill = 0;
         name = "";
         password = "";
+        email = "";
     }
 
     public User(String name, String password) {
         this.name = name;
         this.password = password;
+        email = "";
+        skill = 0;
+    }
+
+    public User(String name, String password, String email) {
+        this.name = name;
+        this.password = password;
+        this.email = email;
         skill = 0;
     }
 
