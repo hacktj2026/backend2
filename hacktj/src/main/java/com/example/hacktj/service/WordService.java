@@ -9,6 +9,7 @@ import com.example.hacktj.model.Word;
 import com.example.hacktj.repository.WordRepository;
 import java.util.*;
 import java.io.File;
+import com.example.hacktj.model.User;
 
 @Service
 public class WordService {
@@ -54,10 +55,10 @@ public class WordService {
         return word;
     }
     public void rightOrWrong(boolean answer, int level) {
-        HashMap<String, Integer> skills = user.updateSkillLevel(last, answer);
+        int skill = user.updateSkill(last, answer);
         List<Word> words = wordRepository.findByLevel(level);
         for(Word word : words)
-            if(convertSkillLevel(word.getSkillLevel()) < skills.get(word.getWordType()))
+            if(convertSkillLevel(word.getSkillLevel()) < skill)
                 wordRepository.delete(word);
         addWords();
     }
