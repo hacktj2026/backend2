@@ -1,22 +1,31 @@
 package com.example.hacktj.model;
 
-import java.util.HashMap;
-
 public class User {
-    public HashMap<String, Integer> skills;
+    public int skill;
     
     public User() {
-        skills = new HashMap<>();
+        skill = 0;
+
     }
 
-    public HashMap<String, Integer> getSkills() {
-        return skills;
+    public int getSkill() {
+        return skill;
     }
 
-    public HashMap<String, Integer> update(Word word, boolean isCorrect) {
-        String skillLevel = word.getSkillLevel();
-        int currentCount = skills.getOrDefault(skillLevel, 0);
-    
-        return skills;
+    public void updateSkill(Word word, boolean isCorrect) {
+        
+    }
+
+    public int skillNum(String s)
+    {
+        switch(s) {
+            case "A1": return 0;
+            case "A2": return 20;   
+            case "B1": return 40;
+            case "B2": return 60;
+            case "C1": return 80;
+            case "C2": return 100;
+        }
+        return 999;
     }
 }
