@@ -16,6 +16,8 @@ public class Word
     private String meaning;
     private int level;
 
+    public Word() {}
+    
     public Word(String word, String skillLevel, String wordType, String meaning, int level)
     {
         this.word = word;
