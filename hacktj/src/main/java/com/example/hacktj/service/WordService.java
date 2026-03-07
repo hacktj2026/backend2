@@ -5,16 +5,14 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
-
 import com.example.hacktj.model.Word;
 import com.example.hacktj.repository.WordRepository;
-
 import java.util.*;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import jakarta.annotation.PostConstruct;
-
 import java.io.File;
+import java.io.InputStream;
 
 @Service
 public class WordService {
@@ -25,14 +23,26 @@ public class WordService {
 
     User user;
     int max = 10;
-    ObjectMapper mapper = new ObjectMapper();
-    List<Word> words = mapper.readValue(new File("words.json"),mapper.getTypeFactory().constructCollectionType(List.class, Word.class));
     Word last = null;
 
-    @PostConstruct
-    public void init() {
-        for(int a = 0; a < 10; a++)
-            wordRepository.save(new Word(words.get(a)));
+    public void setUp(int m) throws Exception {
+        max = m;
+        ObjectMapper mapper = new ObjectMapper();
+        InputStream input = getClass().getResourceAsStream("/words.json");
+        Map<String, Map<String, List<WordEntry>>> data = mapper.readValue(input,new TypeReference<Map<String, Map<String, List<WordEntry>>>>() {});
+        int count = 0;
+        for (String level : data.keySet()) {
+            Map<String, List<WordEntry>> wordTypes = data.get(level);
+            for (String wordType : wordTypes.keySet()) {
+                List<WordEntry> words = wordTypes.get(wordType);
+                for (WordEntry entry : words) {
+                    if(count > max) break;
+                    Word word = new Word(entry.getSpanish(), 0, level, wordType, entry.getEnglish(), 0);
+                    wordRepository.save(word);
+                    count++;
+                }
+            }
+        }
     }
     public Word getNext(int level) {
         Query countQuery = new Query(Criteria.where("level").is(level));
@@ -51,5 +61,32 @@ public class WordService {
         }
         last = word;
         return word;
+    }
+    public void rightOrWrong(boolean answer, int level) {
+        HashMap<String, Integer> skills = updateSkillLevel(last, answer);
+        List<Word> words = wordRepository.findByLevel(level);
+        for(Word word : words)
+            if(convertSkillLevel(word.getSkillLevel()) < skills.get(word.getWordType()))
+                wordRepository.delete(word);
+                
+    }
+    private int convertSkillLevel(String skill) {
+        if(skill.equals("A1")) return 17;
+        if(skill.equals("A2")) return 34;
+        if(skill.equals("B1")) return 51;
+        if(skill.equals("B2")) return 68;
+        if(skill.equals("C1")) return 85;
+        return 101;
+    }
+    public class WordEntry
+    {
+        private String spanish;
+        private String english;
+        
+        public WordEntry() {}
+        public String getSpanish() { return spanish; }
+        public String getEnglish() { return english; }
+        public void setSpanish(String spanish) { this.spanish = spanish; }
+        public void setEnglish(String english) { this.english = english; }
     }
 }
