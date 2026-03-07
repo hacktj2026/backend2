@@ -4,16 +4,26 @@ public class User {
     public int skill;
     public String name;
     public String password;
+    public String email;
 
     public User() {
         skill = 0;
         name = "";
         password = "";
+        email = "";
     }
 
     public User(String name, String password) {
         this.name = name;
         this.password = password;
+        email = "";
+        skill = 0;
+    }
+
+    public User(String name, String password, String email) {
+        this.name = name;
+        this.password = password;
+        this.email = email;
         skill = 0;
     }
 
@@ -21,7 +31,7 @@ public class User {
         return skill;
     }
 
-    public void updateSkill(Word word, boolean isCorrect) {
+    public int updateSkill(Word word, boolean isCorrect) {
         int WordSkill = skillNum(word.getSkillLevel());
         boolean bigger = WordSkill > skill;
         int change = (int)Math.sqrt(WordSkill * WordSkill - skill * skill)/2;
@@ -38,6 +48,7 @@ public class User {
               skill -= change;
         }
 
+        return skill;
     }
 
     public int skillNum(String s)
