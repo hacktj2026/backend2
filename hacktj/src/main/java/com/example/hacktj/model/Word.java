@@ -3,7 +3,7 @@ package com.example.hacktj.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document("Word")
+@Document("word")
 public class Word
 {
     @Id
@@ -16,9 +16,8 @@ public class Word
     private String meaning;
     private int level;
 
-    public Word(String id, String word, int timesUsed, String skillLevel, String wordType, String meaning, int level)
+    public Word(String word, int timesUsed, String skillLevel, String wordType, String meaning, int level)
     {
-        this.id = id;
         this.word = word;
         this.timesUsed = timesUsed;
         this.skillLevel = skillLevel;
