@@ -2,10 +2,19 @@ package com.example.hacktj.model;
 
 public class User {
     public int skill;
-    
+    public String name;
+    public String password;
+
     public User() {
         skill = 0;
+        name = "";
+        password = "";
+    }
 
+    public User(String name, String password) {
+        this.name = name;
+        this.password = password;
+        skill = 0;
     }
 
     public int getSkill() {
