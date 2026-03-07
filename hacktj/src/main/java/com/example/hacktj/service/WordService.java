@@ -9,12 +9,7 @@ import org.springframework.stereotype.Service;
 import com.example.hacktj.model.Word;
 import com.example.hacktj.repository.WordRepository;
 
-import java.util.*;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-import jakarta.annotation.PostConstruct;
-
-import java.io.File;
 
 @Service
 public class WordService {
@@ -23,17 +18,8 @@ public class WordService {
     @Autowired
     WordRepository wordRepository;
 
-    User user;
-    int max = 10;
-    ObjectMapper mapper = new ObjectMapper();
-    List<Word> words = mapper.readValue(new File("words.json"),mapper.getTypeFactory().constructCollectionType(List.class, Word.class));
     Word last = null;
 
-    @PostConstruct
-    public void init() {
-        for(int a = 0; a < 10; a++)
-            wordRepository.save(new Word(words.get(a)));
-    }
     public Word getNext(int level) {
         Query countQuery = new Query(Criteria.where("level").is(level));
         long count = mongoTemplate.count(countQuery, Word.class);
@@ -51,5 +37,13 @@ public class WordService {
         }
         last = word;
         return word;
+    }
+
+    public void recordAnswer(String wordId, boolean correct) {
+        Word word = wordRepository.findById(wordId).orElse(null);
+        if (word != null) {
+            word.setTimesUsed(word.getTimesUsed() + 1);
+            wordRepository.save(word);
+        }
     }
 }

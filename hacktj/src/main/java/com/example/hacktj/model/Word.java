@@ -14,11 +14,7 @@ public class Word
     private String skillLevel;
     private String wordType;
     private String meaning;
-<<<<<<< HEAD
-    private int runningAccuracy;
-=======
     private int level;
->>>>>>> 54786ed39784256951644f7d5ea7f8790aea2ded
 
     public Word(String word, int timesUsed, String skillLevel, String wordType, String meaning, int level)
     {

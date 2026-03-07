@@ -1,4 +1,4 @@
-gotpackage com.example.hacktj;
+package com.example.hacktj;
 
 import com.example.hacktj.model.Word;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -10,12 +10,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import com.example.hacktj.model.Word;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class problemBuilder {
     Word word;

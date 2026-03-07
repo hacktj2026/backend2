@@ -13,16 +13,6 @@ import com.example.hacktj.model.Word;
 @RequestMapping("/game")
 @CrossOrigin(origins = "*")
 public class HacktjApplication {
-<<<<<<< HEAD
-    public static void main(String[] args) {
-      
-      SpringApplication.run(HacktjApplication.class, args);
-    }
-    @GetMapping("/hello")
-    public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
-      return String.format("Hello %s!", name);
-    }
-=======
   @Autowired
   WordRepository wordRepository;
   @Autowired
@@ -68,5 +58,4 @@ public class HacktjApplication {
     public String getCorrectAnswer() { return correctAnswer; }
     public void setCorrectAnswer(String correctAnswer) { this.correctAnswer = correctAnswer; }
   }
->>>>>>> 54786ed39784256951644f7d5ea7f8790aea2ded
 }
