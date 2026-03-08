@@ -40,7 +40,7 @@ public class ConjugationBuilder extends Builder {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode problem = mapper.createObjectNode();
 
-        problem.put("question", "Conjugate the verb '" + w.getWord() + "' in the " + prn + " form.");
+        problem.put("question", "Conjugate the verb '" + w.getWord() + "' in the " + type + prn + " form.");
         problem.put("correctAnswer", str);
         problem.putArray("choices");
         problem.put("conjugationType", type);
