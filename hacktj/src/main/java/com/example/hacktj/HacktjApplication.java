@@ -278,11 +278,13 @@ public class HacktjApplication {
       String[] choices = mapper.convertValue(problemData.get("choices"), String[].class);
       
       return new ProblemResponse(
-        word.getId(),
-        problemData.get("question").asText(),
-        problemData.get("correctAnswer").asText(),
-        choices,
-        word.getSkillLevel()
+      word.getId(),
+      problemData.get("question").asText(),
+      problemData.get("correctAnswer").asText(),
+      new String[0],
+      word.getSkillLevel() != null ? word.getSkillLevel() : "A1",
+      problemData.get("conjugationType").asText(),  // lowercase c
+      problemData.get("Pronoun").asText()            // capital P
       );
     
     }
