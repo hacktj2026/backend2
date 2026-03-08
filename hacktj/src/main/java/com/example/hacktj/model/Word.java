@@ -51,5 +51,10 @@ public class Word
     public void setLevel(int level) { this.level = level; }
     public int getLevel() { return level; }
 
-    public boolean equals(Word w) { return w.getWord().equals(this.word); }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Word)) return false;
+        Word w = (Word) o;
+        return w.getWord().equals(this.word);
+    }
 }
