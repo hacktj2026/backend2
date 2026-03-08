@@ -51,7 +51,7 @@ public class WordService {
             System.out.println(word.getWord());
     }
     public void addWords(int skill) {
-        List<Word> existing = wordRepository.findByLevel(1); // ✅ one DB call
+        List<Word> existing = wordRepository.findByLevel(1);
         List<Word> words = vocabData[convertSkillString(skill)];
         Collections.shuffle(words);
         for(Word word : words) {
