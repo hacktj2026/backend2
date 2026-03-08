@@ -30,6 +30,7 @@ public class Conjugation {
                 conjugations[j*2] = st.nextToken();
                 conjugations[j*2 + 1] = st.nextToken();
             }
+            r.readLine(); // Read the empty line
             presentIrregulars.put(word, new presentIrg(word, conjugations));
         }
     }
