@@ -81,7 +81,7 @@ public class WordService {
         int skill = user.updateSkill(last, answer);
         List<Word> words = wordRepository.findByLevel(level);
         for(Word word : words)
-            if(word != null && convertSkillLevel(word.getSkillLevel()) < skill && word.getLevel() == 1)
+            if(word != null && Math.abs(convertSkillLevel(word.getSkillLevel()) - user.skill) < 10 && word.getLevel() == 1)
                 word.setLevel(2);
     }
     private int convertSkillLevel(String skill) {
