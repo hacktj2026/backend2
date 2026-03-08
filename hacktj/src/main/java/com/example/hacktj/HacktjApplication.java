@@ -60,12 +60,12 @@ public class HacktjApplication {
       
       return new ProblemResponse(
         word.getId(),
-        problemData.get("question").asText(),
-        problemData.get("correctAnswer").asText(),
-        choices,
-        word.getSkillLevel(),
-        problemData.get("ConjugationType").asText(),
-        problemData.get("Pronoun").asText()
+      problemData.get("question").asText(),
+      problemData.get("correctAnswer").asText(),
+      new String[0],
+      word.getSkillLevel() != null ? word.getSkillLevel() : "A1",
+      problemData.get("conjugationType").asText(),  
+      problemData.get("Pronoun").asText()    
       );
     }
     problemBuilder builder = new problemBuilder(word);
@@ -283,8 +283,8 @@ public class HacktjApplication {
       problemData.get("correctAnswer").asText(),
       new String[0],
       word.getSkillLevel() != null ? word.getSkillLevel() : "A1",
-      problemData.get("conjugationType").asText(),  // lowercase c
-      problemData.get("Pronoun").asText()            // capital P
+      problemData.get("conjugationType").asText(),  
+      problemData.get("Pronoun").asText()            
       );
     
     }
