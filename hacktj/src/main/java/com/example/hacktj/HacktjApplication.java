@@ -1,8 +1,11 @@
 package com.example.hacktj;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,15 +13,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.hacktj.model.User;
 import com.example.hacktj.model.Word;
 import com.example.hacktj.model.ConjugationBuilder;
-import com.example.hacktj.model.User;
 import com.example.hacktj.model.problemBuilder;
 import com.example.hacktj.repository.UserRepository;
 import com.example.hacktj.repository.WordRepository;
 import com.example.hacktj.service.WordService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @SpringBootApplication
 @RestController
@@ -80,10 +82,20 @@ public class HacktjApplication {
 
   @PostMapping("/check-answer")
   public AnswerResponse checkAnswer(@RequestBody AnswerRequest request) {
+    if(userRepository.findByName(request.getUsername()) == null)
+      userRepository.save(new User(request.getUsername()));
     Word word = wordRepository.findByWord(request.getWordName());
     boolean correct = word.getMeaning().equals(request.getSelected());
     wordService.rightOrWrong(correct, word.getLevel(), userRepository.findByName(request.getUsername()));
     return new AnswerResponse(correct);
+  }
+  @DeleteMapping("/users")
+  public void deleteAllUsers() {
+      userRepository.deleteAll();
+  }
+  @GetMapping("/users")
+  public List<User> getAllUsers() {
+      return userRepository.findAll();
   }
 
   public static class ProblemResponse {
@@ -105,7 +117,7 @@ public class HacktjApplication {
   }
 
   public static class AnswerResponse {
-    private boolean correct;
+    public boolean correct;
     public AnswerResponse(boolean correct) {
       this.correct = correct;
     }

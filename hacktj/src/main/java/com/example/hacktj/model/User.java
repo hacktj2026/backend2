@@ -1,7 +1,9 @@
 package com.example.hacktj.model;
+import org.springframework.data.mongodb.core.index.Indexed;
 
 public class User {
-    public int skill;
+    private int skill;
+    @Indexed(unique = true)
     private String name;
 
     public User() {
