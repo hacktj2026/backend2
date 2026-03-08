@@ -2,9 +2,18 @@ package com.example.hacktj;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.*;
-import com.example.hacktj.service.WordService;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.hacktj.model.User;
 import com.example.hacktj.model.Word;
+import com.example.hacktj.repository.WordRepository;
+import com.example.hacktj.service.WordService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootApplication
@@ -14,6 +23,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class HacktjApplication {
   @Autowired
   WordService wordService;
+  @Autowired
+  WordRepository wordRepository;
   public static void main(String[] args) {
     SpringApplication.run(HacktjApplication.class, args);
   }
@@ -41,9 +52,10 @@ public class HacktjApplication {
   // Check if the answer is correct
   @PostMapping("/check-answer")
   public AnswerResponse checkAnswer(@RequestBody AnswerRequest request) {
-    boolean correct = request.getSelected().equals(request.getCorrectAnswer());
-    wordService.recordAnswer(request.getWordId(), correct);
-    return new AnswerResponse(correct, request.getCorrectAnswer());
+    Word word = wordRepository.findByName(request.getWordName());
+    boolean correct = word.getMeaning().equals(request.getSelected());
+    wordService.rightOrWrong(correct, word.getLevel(), new User());
+    return new AnswerResponse(correct);
   }
 
   // Response DTOs for cleaner JSON serialization
@@ -66,20 +78,16 @@ public class HacktjApplication {
   public static class AnswerResponse {
     public boolean correct;
     public String correctAnswer;
-
-    public AnswerResponse(boolean correct, String correctAnswer) {
+    public AnswerResponse(boolean correct) {
       this.correct = correct;
-      this.correctAnswer = correctAnswer;
     }
   }
 
   public static class AnswerRequest {
-    public String wordId;
+    public String wordName;
     public String selected;
-    public String correctAnswer;
 
-    public String getWordId() { return wordId; }
+    public String getWordName() { return wordName; }
     public String getSelected() { return selected; }
-    public String getCorrectAnswer() { return correctAnswer; }
   }
 }
