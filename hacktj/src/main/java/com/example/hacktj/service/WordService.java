@@ -30,17 +30,21 @@ public class WordService {
     public void setUp() {
         try {
             scan = new Scanner(getClass().getResourceAsStream("/vocabulary.txt"));
-            addWords();
+            addWords(0);
         }
         catch(Exception e) {
             System.out.println("Error");
         }
     }
-    public void addWords() {
+    public void addWords(int skill) {
         long size = wordRepository.count();
-        for(long a = size; a < max; a++) {
+        long a = size;
+        while(a < max) {
             String[] sarr = scan.nextLine().split(" ");
-            wordRepository.save(new Word(sarr[0], sarr[2], sarr[1], sarr[3], 1));
+            if(convertSkillLevel(sarr[2]) >= skill) {
+                wordRepository.save(new Word(sarr[0], sarr[2], sarr[1], sarr[3], 1));
+                a++;
+            }
         }
     }
     public Word getNext() {
@@ -79,7 +83,6 @@ public class WordService {
         for(Word word : words)
             if(word != null && convertSkillLevel(word.getSkillLevel()) < skill && word.getLevel() == 1)
                 word.setLevel(2);
-        addWords();
     }
     private int convertSkillLevel(String skill) {
         if(skill.equals("A1")) return 17;
