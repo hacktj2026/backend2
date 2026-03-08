@@ -1,7 +1,7 @@
 package com.example.hacktj.model;
 
 public class User {
-    private int skill;
+    public int skill;
     private String name;
 
     public User() {
