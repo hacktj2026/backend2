@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,9 @@ import com.example.hacktj.repository.UserRepository;
 import com.example.hacktj.repository.WordRepository;
 import com.example.hacktj.service.WordService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Criteria;
 
 @SpringBootApplication
 @RestController
@@ -34,15 +38,16 @@ public class HacktjApplication {
   WordRepository wordRepository;
   @Autowired
   UserRepository userRepository;
+  @Autowired
+  MongoTemplate mongoTemplate;
   public static void main(String[] args) {
     SpringApplication.run(HacktjApplication.class, args);
   }
 
   @GetMapping("/problem")
   public ProblemResponse getProblem(@RequestParam(value = "username") String username) throws Exception {
-    if(userRepository.findByName(username) == null)
-        userRepository.save(new User(username));
-    User user = userRepository.findByName(username);
+    Query query = new Query(Criteria.where("email").is(username));
+     User user = mongoTemplate.findOne(query, User.class);
     System.out.println(username + " " + user.skill);
     Word word = wordService.getNext();
     if (word == null) {
@@ -87,9 +92,9 @@ public class HacktjApplication {
 
   @PostMapping("/check-answer")
   public AnswerResponse checkAnswer(@RequestParam(value = "username") String username, @RequestParam(value = "correct") boolean correct, @RequestParam(value = "level") String level) {
-    if(userRepository.findByName(username) == null)
-      userRepository.save(new User(username));
-    System.out.println("hiii" + username + " " + correct + " " + level + " " + userRepository.findByName(username).skill);
+    Query query = new Query(Criteria.where("email").is(username));
+     User user = mongoTemplate.findOne(query, User.class);
+    System.out.println("hiii" + username + " " + correct + " " + level + " " + user);
 
     int lvl = 0;
     switch(level) {
@@ -113,7 +118,8 @@ public class HacktjApplication {
         break;
     }
 
-    wordService.rightOrWrong(correct, lvl, userRepository.findByName(username));
+    Query query = new Query(Criteria.where("email").is(username));
+    wordService.rightOrWrong(correct, lvl, mongoTemplate.findOne(query, User.class));
   
     return new AnswerResponse(correct);
   }
@@ -125,7 +131,7 @@ public class HacktjApplication {
   public List<User> getAllUsers() {
       return userRepository.findAll();
   }
-
+  
   public static class ProblemResponse {
     public String wordId;
     public String question;
@@ -178,7 +184,8 @@ public class HacktjApplication {
 
   @GetMapping("/mcq/problem")
   public ProblemResponse getProblemMCQ(@RequestParam(value = "username") String username) throws Exception {
-     User user = userRepository.findByName(username);
+    Query query = new Query(Criteria.where("email").is(username));
+     User user = mongoTemplate.findOne(query, User.class);
 
     Word word = wordService.getNext();
     if (word == null) {
@@ -205,31 +212,32 @@ public class HacktjApplication {
 
     @PostMapping("/mcq/check-answer")
   public AnswerResponse checkAnswerMCQ(@RequestBody AnswerRequest request) {
-    if(userRepository.findByName(request.getUsername()) == null)
-      userRepository.save(new User(request.getUsername()));
+    Query query = new Query(Criteria.where("email").is(username));
+     User user = mongoTemplate.findOne(query, User.class);
     Word word = wordRepository.findByWord(request.getWordName());
     boolean correct;
     
     correct = word.getMeaning().equals(request.getSelected());
-    wordService.rightOrWrong(correct, word.getLevel(), userRepository.findByName(request.getUsername()));
-    userRepository.findByName(request.getUsername()).updateSkill(word, correct);
+    wordService.rightOrWrong(correct, word.getLevel(), user);
+    user.updateSkill(word, correct);
     return new AnswerResponse(correct);
   }
 
   @PostMapping("/frq/check-answer")
   public AnswerResponse checkAnswerFRQ(@RequestBody AnswerRequest request) {
-    if(userRepository.findByName(request.getUsername()) == null)
-      userRepository.save(new User(request.getUsername()));
+    Query query = new Query(Criteria.where("email").is(username));
+     User user = mongoTemplate.findOne(query, User.class);
     Word word = wordRepository.findByWord(request.getWordName());
     boolean correct = false;
       String correctAnswer;
+      
       switch(request.getConjugationType())
       {
         case "present":
          correctAnswer = Conjugation.conjugatePresent(word, request.getPronoun());
           correct = correctAnswer.equals(request.getSelected());
-          wordService.rightOrWrong(correct, word.getLevel(), userRepository.findByName(request.getUsername()));
-          userRepository.findByName(request.getUsername()).updateSkill(word, correct);
+          wordService.rightOrWrong(correct, word.getLevel(), user);
+          user.updateSkill(word, correct);
           return new AnswerResponse(correct);
         case "future":
           correctAnswer = Conjugation.conjugateFuture(word, request.getPronoun());
@@ -251,9 +259,9 @@ public class HacktjApplication {
 
   @GetMapping("/frq/problem")
   public ProblemResponse getProblemFRQ(@RequestParam(value = "username") String username) throws Exception {
-    if(userRepository.findByName(username) == null)
-        userRepository.save(new User(username));
-    User user = userRepository.findByName(username);
+    Query query = new Query(Criteria.where("email").is(username));
+     User user = mongoTemplate.findOne(query, User.class);
+    
 
     Word word = wordService.getNext();
     if (word == null) {
