@@ -89,7 +89,7 @@ public class HacktjApplication {
   public AnswerResponse checkAnswer(@RequestParam(value = "username") String username, @RequestParam(value = "correct") boolean correct, @RequestParam(value = "level") String level) {
     if(userRepository.findByName(username) == null)
       userRepository.save(new User(username));
-    System.out.println("hiii" + username);
+    System.out.println("hiii" + username + " " + correct + " " + level + " " + userRepository.findByName(username).skill);
 
     int lvl = 0;
     switch(level) {
