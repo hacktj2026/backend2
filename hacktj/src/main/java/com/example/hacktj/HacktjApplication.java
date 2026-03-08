@@ -61,7 +61,9 @@ public class HacktjApplication {
         problemData.get("question").asText(),
         problemData.get("correctAnswer").asText(),
         choices,
-        word.getSkillLevel()
+        word.getSkillLevel(),
+        problemData.get("ConjugationType").asText(),
+        problemData.get("Pronoun").asText()
       );
     }
     problemBuilder builder = new problemBuilder(word);
