@@ -7,11 +7,11 @@ public class User {
     private String name;
 
     public User() {
-        skill = 50;
+        skill = 0;
         name = "";
     }
     public User(String name) {
-        skill = 50;
+        skill = 0;
         this.name = name;
     }
     public User(String name, int skill) {
@@ -26,7 +26,7 @@ public class User {
     public int updateSkill(Word word, boolean isCorrect) {
         int WordSkill = skillNum(word.getSkillLevel());
         boolean bigger = WordSkill > skill;
-        int change = (int)Math.sqrt(WordSkill * WordSkill - skill * skill)/2;
+        int change = (int)Math.sqrt(WordSkill * WordSkill - skill * skill + 5)/2;
         if(isCorrect) {
             if(bigger)
              skill += change; 
@@ -39,7 +39,8 @@ public class User {
             else
               skill -= change;
         }
-        System.out.println(skill);
+        System.out.println(skill + " " + change);
+        System.out.println(WordSkill + " " + skill);
         return skill;
     }
 
