@@ -7,11 +7,11 @@ public class User {
     private String name;
 
     public User() {
-        skill = 0;
+        skill = 50;
         name = "";
     }
     public User(String name) {
-        skill = 0;
+        skill = 50;
         this.name = name;
     }
     public User(String name, int skill) {
