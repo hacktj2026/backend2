@@ -13,9 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.hacktj.model.Conjugation;
+import com.example.hacktj.model.ConjugationBuilder;
 import com.example.hacktj.model.User;
 import com.example.hacktj.model.Word;
-import com.example.hacktj.model.ConjugationBuilder;
 import com.example.hacktj.model.problemBuilder;
 import com.example.hacktj.repository.UserRepository;
 import com.example.hacktj.repository.WordRepository;
@@ -85,7 +86,30 @@ public class HacktjApplication {
     if(userRepository.findByName(request.getUsername()) == null)
       userRepository.save(new User(request.getUsername()));
     Word word = wordRepository.findByWord(request.getWordName());
-    boolean correct = word.getMeaning().equals(request.getSelected());
+    boolean correct;
+    if(request.getConjugationType() != null)
+    {
+      String correctAnswer;
+      switch(request.getConjugationType())
+      {
+        case "present":
+         correctAnswer = Conjugation.conjugatePresent(word, request.getPronoun());
+          correct = correctAnswer.equals(request.getSelected());
+          wordService.rightOrWrong(correct, word.getLevel(), userRepository.findByName(request.getUsername()));
+          return new AnswerResponse(correct);
+        case "future":
+          correctAnswer = Conjugation.conjugateFuture(word, request.getPronoun());
+          correct = correctAnswer.equals(request.getSelected());
+          wordService.rightOrWrong(correct, word.getLevel(), userRepository.findByName(request.getUsername()));
+          return new AnswerResponse(correct);
+        case "conditional":
+          correctAnswer = Conjugation.conjugateConditional(word, request.getPronoun());
+          correct = correctAnswer.equals(request.getSelected());
+          wordService.rightOrWrong(correct, word.getLevel(), userRepository.findByName(request.getUsername()));
+          return new AnswerResponse(correct);
+      }
+    }
+    correct = word.getMeaning().equals(request.getSelected());
     wordService.rightOrWrong(correct, word.getLevel(), userRepository.findByName(request.getUsername()));
     return new AnswerResponse(correct);
   }
@@ -127,8 +151,12 @@ public class HacktjApplication {
     private String wordName;
     private String selected;
     private String username;
+    private String conjugationType;
+    private String Pronoun;
+    public String getPronoun() { return Pronoun; }
     public String getWordName() { return wordName; }
     public String getSelected() { return selected; }
     public String getUsername() { return username; }
+    public String getConjugationType() { return conjugationType; }
   }
 }
