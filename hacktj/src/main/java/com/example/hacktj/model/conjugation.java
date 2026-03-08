@@ -1,8 +1,53 @@
 package com.example.hacktj.model;
-
+import java.io.BufferedReader;
+import java.util.HashMap;
+import java.util.StringTokenizer;
 public class conjugation {
-    public conjugation() {
-        super();
+    public static class presentIrg {
+        public String word;
+        public String[] conjugations;
+        public presentIrg(String word, String[] conjugations) {
+            this.word = word;
+            this.conjugations = conjugations;
+        }
+    }
+
+    private static HashMap<String, presentIrg> presentIrregulars = new HashMap<>();
+    public conjugation() throws Exception {
+        BufferedReader r = new BufferedReader(new java.io.InputStreamReader(getClass().getResourceAsStream("/present_irregulars.txt")));
+        int size = Integer.parseInt(r.readLine());
+
+        for (int i = 0; i < size; i++) {
+            String word = r.readLine();
+            String[] conjugations = new String[6];
+            for (int j = 0; j < 3; j++) {
+                StringTokenizer st = new StringTokenizer(r.readLine());
+                conjugations[j*2] = st.nextToken();
+                conjugations[j*2 + 1] = st.nextToken();
+            }
+            presentIrregulars.put(word, new presentIrg(word, conjugations));
+        }
+    }
+
+    
+    public static String conjugatePresent(Word word, String pronoun)
+    {
+        String str = word.getWord();
+        if(presentIrregulars.containsKey(str))
+        {
+            presentIrg irg = presentIrregulars.get(str);
+            String[] conjugations = irg.conjugations;
+            switch(pronoun)
+            {
+                case "yo": return conjugations[0];
+                case "tú": return conjugations[1];
+                case "él/ella/usted": return conjugations[2];
+                case "nosotros/nosotras": return conjugations[3];
+                case "vosotros/vosotras": return conjugations[4];
+                case "ellos/ellas/ustedes": return conjugations[5];
+            }
+        }
+        return conjugatePresentNoIrregular(word, pronoun);
     }
 
     public static String conjugateFuture(Word word, String pronoun) {
@@ -71,7 +116,7 @@ public class conjugation {
         return wordStr;
     }
 
-    public String conjugatePresentNoIrregular(Word word, String pronoun) {
+    public static String conjugatePresentNoIrregular(Word word, String pronoun) {
         String wordStr = word.getWord();
         String ending = "";
 

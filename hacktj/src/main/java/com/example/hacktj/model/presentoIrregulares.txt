@@ -1,0 +1,100 @@
+20
+ser
+soy somos
+eres sois
+es son
+
+estar
+estoy estamos
+estás estáis
+está están
+
+ir
+voy vamos
+vas vais
+va van
+
+tener
+tengo tenemos
+tienes tenéis
+tiene tienen
+
+querer
+quiero queremos
+quieres queréis
+quiere quieren
+
+recordar
+recuerdo recordamos
+recuerdas recordáis
+recuerda recuerdan
+
+parecer
+parezco parecemos
+pareces parecéis
+parece parecen
+
+resolver
+resuelvo resolvemos
+resuelves resolvéis
+resuelve resuelven
+
+proponer
+propongo proponemos
+propones ponéis
+propone proponen
+
+conseguir
+consigo conseguimos
+consigues conseguís
+consigue consiguen
+
+reconocer
+reconozco reconocemos
+reconoces reconocéis
+reconoce reconocen
+
+discernir
+discierno discernimos
+disciernes discernís
+discierne disciernen
+
+surgir
+surjo surgimos
+surges surgís
+surge surgen
+
+rendir
+rindo rendimos
+rindes rendís
+rinde rinden
+
+suponer
+supongo suponemos
+supones suponéis
+supone suponen
+
+depender
+dependo dependemos
+dependes dependéis
+depende dependen
+
+conllevar
+conllevo conllevamos
+conllevas conlleváis
+conlleva conllevan
+
+subyacer
+subyazco subyacemos
+subyaces subyacéis
+subyace subyacen
+
+incidir
+incido incidimos
+incides incidís
+incide inciden
+
+soslayar
+soslayo soslayamos
+soslayás soslayáis
+soslaya soslayan
