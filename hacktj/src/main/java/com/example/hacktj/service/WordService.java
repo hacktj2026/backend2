@@ -1,5 +1,7 @@
 package com.example.hacktj.service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.hacktj.model.User;
 import com.example.hacktj.model.Word;
+import com.example.hacktj.model.problemBuilder;
 import com.example.hacktj.repository.WordRepository;
 
 import jakarta.annotation.PostConstruct;
@@ -25,11 +28,18 @@ public class WordService {
     int max = 10;
     Word last = null;
     Scanner scan;
+    private static List<Word>[] vocabData = new ArrayList[6];
 
     @PostConstruct
     public void setUp() {
         try {
-            scan = new Scanner(getClass().getResourceAsStream("/vocabulary.txt"));
+            for(int a = 0; a < vocabData.length; a++)
+                vocabData[a] = new ArrayList<>();
+            Scanner scan = new Scanner(problemBuilder.class.getClassLoader().getResourceAsStream("vocabulary.txt"));
+            while(scan.hasNextLine()) {
+                String[] sarr = scan.nextLine().split(" ");
+                vocabData[convertSkillLevel(sarr[2])].add(new Word(sarr[0], sarr[2], sarr[1], sarr[3], 1));
+            }
             addWords(0);
         }
         catch(Exception e) {
@@ -37,14 +47,21 @@ public class WordService {
         }
     }
     public void addWords(int skill) {
-        long size = wordRepository.count();
-        long a = size;
-        while(a < max) {
-            String[] sarr = scan.nextLine().split(" ");
-            if(convertSkillLevel(sarr[2]) >= skill) {
-                wordRepository.save(new Word(sarr[0], sarr[2], sarr[1], sarr[3], 1));
-                a++;
-            }
+        List<Word> words = vocabData[convertSkillString(skill)];
+        Collections.shuffle(words);
+        for(Word word : words) {
+            if(wordRepository.findByLevel(1).size() == max)
+                break;
+            if(!wordRepository.findByLevel(1).contains(word))
+                wordRepository.save(word);
+        }
+        words = vocabData[convertSkillString(skill + 17)];
+        Collections.shuffle(words);
+        for(Word word : words) {
+            if(wordRepository.findByLevel(1).size() == max)
+                break;
+            if(!wordRepository.findByLevel(1).contains(word))
+                wordRepository.save(word);
         }
     }
     public Word getNext() {
@@ -91,6 +108,14 @@ public class WordService {
         if(skill.equals("B2")) return 68;
         if(skill.equals("C1")) return 85;
         return 101;
+    }
+    private int convertSkillString(int skill) {
+        if(skill < 17) return 0;
+        if(skill < 34) return 1;
+        if(skill < 51) return 2;
+        if(skill < 68) return 3;
+        if(skill < 85) return 4;
+        return 5;
     }
     public void setMax(int max) { this.max = max; }
     public void recordAnswer(String wordId, boolean correct) {
