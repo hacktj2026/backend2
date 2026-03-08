@@ -14,6 +14,8 @@ import com.example.hacktj.model.Word;
 import com.example.hacktj.model.problemBuilder;
 import com.example.hacktj.service.WordService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.example.hacktj.model.ConjugationBuilder;
 
 @SpringBootApplication
 @RestController
@@ -35,20 +37,28 @@ public class HacktjApplication {
     }
     ObjectMapper mapper = new ObjectMapper();
     
-    problemBuilder builder = new problemBuilder(word);
-    String problemJson = builder.problem();
-    var problemData = mapper.readTree(problemJson);
-    
-    
-    String[] choices = mapper.convertValue(problemData.get("choices"), String[].class);
-    
-    return new ProblemResponse(
-      word.getId(),
-      problemData.get("question").asText(),
-      problemData.get("correctAnswer").asText(),
-      choices,
-      word.getSkillLevel()
-    );
+    if(word.getWordType().equals("verb") && Math.random() < 0.5)
+    {
+      ConjugationBuilder builder = new ConjugationBuilder(word);
+      
+    }
+    else
+    {
+      problemBuilder builder = new problemBuilder(word);
+      String problemJson = builder.problem();
+      var problemData = mapper.readTree(problemJson);
+      
+      
+      String[] choices = mapper.convertValue(problemData.get("choices"), String[].class);
+      
+      return new ProblemResponse(
+        word.getId(),
+        problemData.get("question").asText(),
+        problemData.get("correctAnswer").asText(),
+        choices,
+        word.getSkillLevel()
+      );
+    }
   }
 
   // Check if the answer is correct
