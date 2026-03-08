@@ -1,6 +1,7 @@
 package com.example.hacktj.model;
 import org.springframework.data.mongodb.core.index.Indexed;
-
+import org.springframework.data.mongodb.core.mapping.Document;
+@Document("user")
 public class User {
     public int skill;
     @Indexed(unique = true)
@@ -25,6 +26,22 @@ public class User {
     public String getName() { return name; }
     public int updateSkill(Word word, boolean isCorrect) {
         int WordSkill = skillNum(word.getSkillLevel());
+        boolean bigger = WordSkill > skill;
+        int change = (int)(WordSkill-skill);
+        if(isCorrect)
+            change = Math.max(change, 3);
+        if(isCorrect) {
+            if(bigger)
+             skill += change * 1.5; 
+            else
+             skill += change;
+        }
+        skill = Math.min(skill, 100);
+        return skill;
+    }
+
+    public int updateSkill(String s, boolean isCorrect) {
+        int WordSkill = skillNum(s);
         boolean bigger = WordSkill > skill;
         int change = (int)(WordSkill-skill);
         if(isCorrect)

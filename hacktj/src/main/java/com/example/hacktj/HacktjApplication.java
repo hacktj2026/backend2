@@ -49,7 +49,7 @@ public class HacktjApplication {
       throw new Exception("No word found");
     }
     ObjectMapper mapper = new ObjectMapper();
-    System.out.println("Word type: " + word.getWordType());
+   
     if(word.getWordType().equals("verb") && Math.random() < 0.5) {
       ConjugationBuilder builder = new ConjugationBuilder(word);
       String problemJson = builder.problem(user);
@@ -86,38 +86,35 @@ public class HacktjApplication {
   }
 
   @PostMapping("/check-answer")
-  public AnswerResponse checkAnswer(@RequestBody AnswerRequest request) {
-    if(userRepository.findByName(request.getUsername()) == null)
-      userRepository.save(new User(request.getUsername()));
-    Word word = wordRepository.findByWord(request.getWordName());
-    boolean correct;
-    if(request.getConjugationType() != null)
-    {
-      String correctAnswer;
-      switch(request.getConjugationType())
-      {
-        case "present":
-         correctAnswer = Conjugation.conjugatePresent(word, request.getPronoun());
-          correct = correctAnswer.equals(request.getSelected());
-          wordService.rightOrWrong(correct, word.getLevel(), userRepository.findByName(request.getUsername()));
-          userRepository.findByName(request.getUsername()).updateSkill(word, correct);
-          return new AnswerResponse(correct);
-        case "future":
-          correctAnswer = Conjugation.conjugateFuture(word, request.getPronoun());
-          correct = correctAnswer.equals(request.getSelected());
-          wordService.rightOrWrong(correct, word.getLevel(), userRepository.findByName(request.getUsername()));
-          userRepository.findByName(request.getUsername()).updateSkill(word, correct);
-          return new AnswerResponse(correct);
-        case "conditional":
-          correctAnswer = Conjugation.conjugateConditional(word, request.getPronoun());
-          correct = correctAnswer.equals(request.getSelected());
-          wordService.rightOrWrong(correct, word.getLevel(), userRepository.findByName(request.getUsername()));
-          userRepository.findByName(request.getUsername()).updateSkill(word, correct);
-          return new AnswerResponse(correct);
-      }
+  public AnswerResponse checkAnswer(@RequestParam(value = "username") String username, @RequestParam(value = "correct") boolean correct, @RequestParam(value = "level") String level) {
+    if(userRepository.findByName(username) == null)
+      userRepository.save(new User(username));
+    System.out.println("hiii" + username + " " + correct + " " + level + " " + userRepository.findByName(username).skill);
+
+    int lvl = 0;
+    switch(level) {
+      case "A1":
+        lvl = 1;
+        break;
+      case "A2":
+        lvl = 2;
+        break;
+      case "B1":
+        lvl = 3;
+        break;
+      case "B2":
+        lvl = 4;
+        break;
+      case "C1":
+        lvl = 5;
+        break;
+      case "C2":
+        lvl = 6;  
+        break;
     }
-    correct = word.getMeaning().equals(request.getSelected());
-    wordService.rightOrWrong(correct, word.getLevel(), userRepository.findByName(request.getUsername()));
+
+    wordService.rightOrWrong(correct, lvl, userRepository.findByName(username));
+  
     return new AnswerResponse(correct);
   }
   @DeleteMapping("/users")
