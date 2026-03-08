@@ -51,21 +51,15 @@ public class WordService {
             System.out.println(word.getWord());
     }
     public void addWords(int skill) {
+        List<Word> existing = wordRepository.findByLevel(1); // ✅ one DB call
         List<Word> words = vocabData[convertSkillString(skill)];
         Collections.shuffle(words);
         for(Word word : words) {
-            if(wordRepository.findByLevel(1).size() == max)
-                break;
-            if(!wordRepository.findByLevel(1).contains(word))
+            if(existing.size() >= max) break;
+            if(!existing.contains(word)) {
                 wordRepository.save(word);
-        }
-        words = vocabData[convertSkillString(skill + 17)];
-        Collections.shuffle(words);
-        for(Word word : words) {
-            if(wordRepository.findByLevel(1).size() == max)
-                break;
-            if(!wordRepository.findByLevel(1).contains(word))
-                wordRepository.save(word);
+                existing.add(word);
+            }
         }
     }
     public Word getNext() {
