@@ -29,7 +29,7 @@ public class User {
         boolean bigger = WordSkill > skill;
         int change = (int)(WordSkill-skill);
         if(isCorrect)
-            change = Math.max(change, 5);
+            change = Math.max(change, 3);
         if(isCorrect) {
             if(bigger)
              skill += change * 1.5; 
