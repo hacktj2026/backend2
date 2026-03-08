@@ -1,8 +1,10 @@
 package com.example.hacktj.model;
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.HashMap;
 import java.util.StringTokenizer;
-public class conjugation {
+
+public class Conjugation {
     public static class presentIrg {
         public String word;
         public String[] conjugations;
@@ -13,8 +15,9 @@ public class conjugation {
     }
 
     private static HashMap<String, presentIrg> presentIrregulars = new HashMap<>();
-    public conjugation() throws Exception {
-        BufferedReader r = new BufferedReader(new java.io.InputStreamReader(getClass().getResourceAsStream("/present_irregulars.txt")));
+    public Conjugation() throws Exception {
+    
+        BufferedReader r = new BufferedReader(new FileReader("src/main/resources/presentoIrregulares.txt"));
         int size = Integer.parseInt(r.readLine());
 
         for (int i = 0; i < size; i++) {

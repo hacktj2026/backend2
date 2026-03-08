@@ -2,15 +2,15 @@ package com.example.hacktj.model;
 
 public class test {
     public static void main(String[] args) {
-        conjugation c = null;
+        Conjugation c = null;
         try {
-            c = new conjugation();
+            c = new Conjugation();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
         Word word = new Word("tener");
         String pronoun = "yo";
-        String conjugatedWord = conjugation.conjugatePresent(word, pronoun);
+        String conjugatedWord = Conjugation.conjugatePresent(word, pronoun);
         System.out.println("Conjugated word: " + conjugatedWord);
     }
 }
