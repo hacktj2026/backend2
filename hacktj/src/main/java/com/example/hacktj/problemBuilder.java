@@ -6,61 +6,64 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class problemBuilder {
     Word word;
     private static final ObjectMapper mapper = new ObjectMapper();
-    private static JsonNode vocabData;
-
+    private static List<Word>[] vocabData = new ArrayList[6];
     static {
         try {
-            // Place spanish_vocab.json in src/main/resources/
-            InputStream is = problemBuilder.class
-                    .getClassLoader()
-                    .getResourceAsStream("spv.json");
-            vocabData = mapper.readTree(is);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to load vocab JSON", e);
+            for(int a = 0; a < vocabData.length; a++)
+                vocabData[a] = new ArrayList<>();
+            Scanner scan = new Scanner(problemBuilder.class.getClassLoader().getResourceAsStream("vocabulary.txt"));
+            while(scan.hasNextLine()) {
+                String[] sarr = scan.nextLine().split(" ");
+                System.out.println(sarr[0]);
+                vocabData[changeDiffLevel(sarr[2])].add(new Word(sarr[0], sarr[2], sarr[1], sarr[3], 1));
+            }
+        }
+        catch(Exception e) {
+            System.out.println(e.toString());
         }
     }
-
+    private static int changeDiffLevel(String s) {
+        System.out.println(s);
+        switch(s) {
+            case "A1": return 0;
+            case "A2": return 1;
+            case "B1": return 2;
+            case "B2": return 3;
+            case "C1": return 4;
+            case "C2": return 5;
+            default: return -1;
+        }
+    }
     public problemBuilder(Word word) {
         this.word = word;
     }
 
     public String problem() throws Exception {
-        String difficulty = word.getSkillLevel();  // e.g. "A1"
-        String wordType = word.getWordType();       // e.g. "nouns"
+        String difficulty = word.getSkillLevel();
+        String wordType = word.getWordType();
 
-        // Get all words of the same difficulty + type from JSON
         List<String> pool = new ArrayList<>();
-        JsonNode typeNode = vocabData.path(difficulty).path(wordType);
 
-        for (JsonNode entry : typeNode) {
-            String spanish = entry.path("spanish").asText();
-            // Don't add the correct word to the wrong answer pool
-            if (!spanish.equals(word.getWord())) {
-                pool.add(spanish);
+        for (Word w : vocabData[changeDiffLevel(difficulty)]) {
+            if (!w.getWord().equals(word.getWord()) && w.getWordType().equals(wordType)) {
+                pool.add(w.getMeaning());
             }
         }
-
-        // Shuffle and pick up to 3 wrong answers
         Collections.shuffle(pool);
         List<String> wrongAnswers = pool.subList(0, Math.min(3, pool.size()));
 
-        // Build choices with correct answer mixed in
         List<String> choices = new ArrayList<>(wrongAnswers);
-        choices.add(word.getWord());
+        choices.add(word.getMeaning());
         Collections.shuffle(choices);
 
-        // Build JSON
         ObjectNode problem = mapper.createObjectNode();
         problem.put("question", "What is the meaning of: " + word.getWord() + "?");
-        problem.put("correctAnswer", word.getWord());
+        problem.put("correctAnswer", word.getMeaning());
         problem.put("skillLevel", difficulty);
         problem.put("wordType", wordType);
 
