@@ -132,7 +132,7 @@ public class HacktjApplication {
     public String correctAnswer;
     public String[] choices;
     public String level;
-
+    public String conjugationType;
     public ProblemResponse() {}
     
     public ProblemResponse(String wordId, String question, String correctAnswer, String[] choices, String level) {
@@ -141,6 +141,16 @@ public class HacktjApplication {
       this.correctAnswer = correctAnswer;
       this.choices = choices;
       this.level = level;
+      
+    }
+
+    public ProblemResponse(String wordId, String question, String correctAnswer, String[] choices, String level, String ConjugationLvl) {
+      this.wordId = wordId;
+      this.question = question;
+      this.correctAnswer = correctAnswer;
+      this.choices = choices;
+      this.level = level;
+      this.conjugationType = ConjugationLvl;
     }
   }
 
