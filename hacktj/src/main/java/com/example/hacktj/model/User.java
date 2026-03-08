@@ -39,6 +39,22 @@ public class User {
         return skill;
     }
 
+    public int updateSkill(String s, boolean isCorrect) {
+        int WordSkill = skillNum(s);
+        boolean bigger = WordSkill > skill;
+        int change = (int)(WordSkill-skill);
+        if(isCorrect)
+            change = Math.max(change, 3);
+        if(isCorrect) {
+            if(bigger)
+             skill += change * 1.5; 
+            else
+             skill += change;
+        }
+        skill = Math.min(skill, 100);
+        return skill;
+    }
+
     public int skillNum(String s)
     {
         switch(s) {

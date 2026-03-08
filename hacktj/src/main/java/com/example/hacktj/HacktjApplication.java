@@ -50,7 +50,7 @@ public class HacktjApplication {
     }
     ObjectMapper mapper = new ObjectMapper();
    
-    if(word.getWordType().equals("verb") && Math.random() < 0.5) {
+    if(word.getWordType().equals("verb") && Math.random() < 0.9) {
       ConjugationBuilder builder = new ConjugationBuilder(word);
       String problemJson = builder.problem(user);
       
@@ -114,6 +114,9 @@ public class HacktjApplication {
     }
 
     wordService.rightOrWrong(correct, lvl, userRepository.findByName(username));
+    userRepository.findByName(username).updateSkill(level, correct);  
+    
+    userRepository.save(userRepository.findByName(username));
     return new AnswerResponse(correct);
   }
   @DeleteMapping("/users")
