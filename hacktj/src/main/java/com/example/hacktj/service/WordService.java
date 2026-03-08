@@ -25,10 +25,10 @@ public class WordService {
     @Autowired
     WordRepository wordRepository;
 
-    int max = 10;
+    int max = 50;
     Word last = null;
     Scanner scan;
-    private static List<Word>[] vocabData = new ArrayList[6];
+    public static List<Word>[] vocabData = new ArrayList[6];
 
     @PostConstruct
     public void setUp() {
