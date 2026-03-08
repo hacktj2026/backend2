@@ -259,6 +259,10 @@ public class HacktjApplication {
     if (word == null) {
       throw new Exception("No word found");
     }
+
+    while(!word.getWordType().equals("verb")) {
+      word = wordService.getNext();
+    }
     ObjectMapper mapper = new ObjectMapper();
     
     

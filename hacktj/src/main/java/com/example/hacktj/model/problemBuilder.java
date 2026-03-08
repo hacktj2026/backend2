@@ -17,12 +17,14 @@ public class problemBuilder extends Builder {
 
     public problemBuilder(Word word) {
         this.word = word;
-        for(int a = 0; a < vocabData.length; a++)
-            vocabData[a] = new ArrayList<>();
-        Scanner scan = new Scanner(problemBuilder.class.getClassLoader().getResourceAsStream("vocabulary.txt"));
-        while(scan.hasNextLine()) {
-            String[] sarr = scan.nextLine().split(" ");
-            vocabData[changeDiffLevel(sarr[2])].add(new Word(sarr[0], sarr[2], sarr[1], sarr[3], 1));
+        if(vocabData[0] == null || vocabData[0].isEmpty()) {
+            for(int a = 0; a < vocabData.length; a++)
+                vocabData[a] = new ArrayList<>();
+            Scanner scan = new Scanner(problemBuilder.class.getClassLoader().getResourceAsStream("vocabulary.txt"));
+            while(scan.hasNextLine()) {
+                String[] sarr = scan.nextLine().split(" ");
+                vocabData[changeDiffLevel(sarr[2])].add(new Word(sarr[0], sarr[2], sarr[1], sarr[3], 1));
+            }
         }
     }
 
