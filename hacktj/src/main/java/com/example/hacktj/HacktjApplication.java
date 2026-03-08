@@ -2,21 +2,7 @@ package com.example.hacktj;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.example.hacktj.model.Word;
-<<<<<<< HEAD
-import com.example.hacktj.model.problemBuilder;
-=======
-import com.example.hacktj.repository.UserRepository;
-import com.example.hacktj.repository.WordRepository;
->>>>>>> bryan
+import org.springframework.web.bind.annotation.*;
 import com.example.hacktj.service.WordService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -45,11 +31,9 @@ public class HacktjApplication {
     
     problemBuilder builder = new problemBuilder(word);
     String problemJson = builder.problem();
-<<<<<<< HEAD
-=======
     
+    // Parse the problem JSON
     ObjectMapper mapper = new ObjectMapper();
->>>>>>> bryan
     var problemData = mapper.readTree(problemJson);
     
     
@@ -66,25 +50,12 @@ public class HacktjApplication {
 
   @PostMapping("/check-answer")
   public AnswerResponse checkAnswer(@RequestBody AnswerRequest request) {
-<<<<<<< HEAD
-    if (request == null || request.wordId == null) {
-      return new AnswerResponse(false);
-    }
-    
-    boolean correct = request.selected != null && request.selected.equals(request.correctAnswer);
-    wordService.recordAnswer(request.wordId, correct);
-    return new AnswerResponse(correct);
+    boolean correct = request.getSelected().equals(request.getCorrectAnswer());
+    wordService.recordAnswer(request.getWordId(), correct);
+    return new AnswerResponse(correct, request.getCorrectAnswer());
   }
 
-  // Response DTOs
-=======
-    Word word = wordRepository.findByWord(request.getWordName());
-    boolean correct = word.getMeaning().equals(request.getSelected());
-    wordService.rightOrWrong(correct, word.getLevel(), userRepository.findByName(request.getUsername()));
-    return new AnswerResponse(correct);
-  }
-
->>>>>>> bryan
+  // Response DTOs for cleaner JSON serialization
   public static class ProblemResponse {
     public String wordId;
     public String question;
@@ -104,37 +75,21 @@ public class HacktjApplication {
   }
 
   public static class AnswerResponse {
-<<<<<<< HEAD
     public boolean correct;
+    public String correctAnswer;
 
-    public AnswerResponse() {}
-    
-=======
-    private boolean correct;
->>>>>>> bryan
-    public AnswerResponse(boolean correct) {
+    public AnswerResponse(boolean correct, String correctAnswer) {
       this.correct = correct;
     }
   }
 
   public static class AnswerRequest {
-<<<<<<< HEAD
     public String wordId;
     public String selected;
     public String correctAnswer;
 
-    public AnswerRequest() {}
-    
-    public void setWordId(String wordId) { this.wordId = wordId; }
-    public void setSelected(String selected) { this.selected = selected; }
-    public void setCorrectAnswer(String correctAnswer) { this.correctAnswer = correctAnswer; }
-=======
-    private String wordName;
-    private String selected;
-    private String username;
-    public String getWordName() { return wordName; }
+    public String getWordId() { return wordId; }
     public String getSelected() { return selected; }
-    public String getUsername() { return username; }
->>>>>>> bryan
+    public String getCorrectAnswer() { return correctAnswer; }
   }
 }
