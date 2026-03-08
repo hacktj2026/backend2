@@ -43,7 +43,7 @@ public class HacktjApplication {
     if(userRepository.findByName(username) == null)
         userRepository.save(new User(username));
     User user = userRepository.findByName(username);
-
+    System.out.println(user.skill);
     Word word = wordService.getNext();
     if (word == null) {
       throw new Exception("No word found");
