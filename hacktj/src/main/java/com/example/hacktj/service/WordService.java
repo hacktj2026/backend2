@@ -87,7 +87,7 @@ public class WordService {
         }
         if(level == 2) {
             word.setTimesUsed(word.getTimesUsed() + 1);
-            if(word.getTimesUsed() > 5)
+            if(word.getTimesUsed() > 3)
                 word.setLevel(3);
         }
         last = word;
