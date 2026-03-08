@@ -90,7 +90,30 @@ public class HacktjApplication {
     if(userRepository.findByName(username) == null)
       userRepository.save(new User(username));
     System.out.println("hiii" + username);
-    wordService.rightOrWrong(correct, wordService.convertSkillLevel(level), userRepository.findByName(username));
+
+    int lvl = 0;
+    switch(level) {
+      case "A1":
+        lvl = 1;
+        break;
+      case "A2":
+        lvl = 2;
+        break;
+      case "B1":
+        lvl = 3;
+        break;
+      case "B2":
+        lvl = 4;
+        break;
+      case "C1":
+        lvl = 5;
+        break;
+      case "C2":
+        lvl = 6;  
+        break;
+    }
+
+    wordService.rightOrWrong(correct, lvl, userRepository.findByName(username));
     return new AnswerResponse(correct);
   }
   @DeleteMapping("/users")
