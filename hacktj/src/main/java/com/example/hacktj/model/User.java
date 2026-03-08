@@ -39,7 +39,7 @@ public class User {
             else
               skill -= change;
         }
-
+        System.out.println(skill);
         return skill;
     }
 
