@@ -22,19 +22,19 @@ public class ConjugationBuilder extends Builder {
         if(u.skill < 50)
         {
             str = c.conjugatePresent(w, prn);
-            type = "Presento";
+            type = "presento";
         }
         else
         {
             if(Math.random() < 0.5)
             {
                 str = c.conjugateConditional(w, prn);
-                type = "Conditional";
+                type = "conditional";
             }
             else
             {
                 str = c.conjugateFuture(w, prn);
-                type = "Futureo";
+                type = "futureo";
             }
         }
         ObjectMapper mapper = new ObjectMapper();
