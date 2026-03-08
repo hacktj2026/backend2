@@ -47,7 +47,7 @@ public class HacktjApplication {
       throw new Exception("No word found");
     }
     ObjectMapper mapper = new ObjectMapper();
-
+    System.out.println("Word type: " + word.getWordType());
     if(word.getWordType().equals("verb") && Math.random() < 0.5) {
       ConjugationBuilder builder = new ConjugationBuilder(word);
       String problemJson = builder.problem(user);
