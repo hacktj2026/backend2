@@ -25,7 +25,7 @@ public class HacktjApplication {
     if (word == null) {
       throw new Exception("No word found for level " + level);
     }
-    
+    ObjectMapper mapper = new ObjectMapper();
     problemBuilder builder = new problemBuilder(word);
     String problemJson = builder.problem();
     var problemData = mapper.readTree(problemJson);
