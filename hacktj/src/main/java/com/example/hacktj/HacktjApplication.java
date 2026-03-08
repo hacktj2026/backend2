@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.hacktj.model.User;
 import com.example.hacktj.model.Word;
+import com.example.hacktj.model.ConjugationBuilder;
 import com.example.hacktj.model.problemBuilder;
 import com.example.hacktj.repository.UserRepository;
 import com.example.hacktj.repository.WordRepository;
@@ -37,13 +38,31 @@ public class HacktjApplication {
   }
 
   @GetMapping("/problem")
-  public ProblemResponse getProblem(@RequestParam(value = "level", defaultValue = "1") int level) throws Exception {
+  public ProblemResponse getProblem(@RequestParam(value = "level", defaultValue = "1") int level, @RequestParam(value = "username") String username) throws Exception {
+    User user = userRepository.findByName(username);
+
     Word word = wordService.getNext(level);
     if (word == null) {
       throw new Exception("No word found for level " + level);
     }
     ObjectMapper mapper = new ObjectMapper();
     
+    if(word.getWordType().equals("verb") && Math.random() < 0.5) {
+      ConjugationBuilder builder = new ConjugationBuilder(word);
+      String problemJson = builder.problem(user);
+      
+      var problemData = mapper.readTree(problemJson);
+      
+      String[] choices = mapper.convertValue(problemData.get("choices"), String[].class);
+      
+      return new ProblemResponse(
+        word.getId(),
+        problemData.get("question").asText(),
+        problemData.get("correctAnswer").asText(),
+        choices,
+        word.getSkillLevel()
+      );
+    }
     problemBuilder builder = new problemBuilder(word);
     String problemJson = builder.problem();
     

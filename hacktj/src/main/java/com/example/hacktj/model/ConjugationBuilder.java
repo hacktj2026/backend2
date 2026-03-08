@@ -1,4 +1,6 @@
 package com.example.hacktj.model;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class ConjugationBuilder extends Builder {
     Conjugation c;
@@ -14,18 +16,26 @@ public class ConjugationBuilder extends Builder {
     }
 
     public String problem(User u) throws Exception {
+        String str;
+        String prn = pronoun();
         if(u.skill < 50)
         {
-            return c.conjugatePresent(w, pronoun());
+            str = c.conjugatePresent(w, prn);
         }
         else
         {
             if(Math.random() < 0.5)
-                return c.conjugatePresent(w, pronoun());
+                str = c.conjugateConditional(w, prn);
             else
-                return c.conjugateFuture(w, pronoun());
+                str = c.conjugateFuture(w, prn);
         }
-        
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode problem = mapper.createObjectNode();
+
+        problem.put("question", "Conjugate the verb '" + w.getWord() + "' in the " + prn + " form.");
+        problem.put("correctAnswer", str);
+        problem.putArray("choices");
+        return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(problem);
     }
 
     public String pronoun()
