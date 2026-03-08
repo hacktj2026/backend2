@@ -40,6 +40,8 @@ public class HacktjApplication {
 
   @GetMapping("/problem")
   public ProblemResponse getProblem(@RequestParam(value = "username") String username) throws Exception {
+    if(userRepository.findByName(username) == null)
+        userRepository.save(new User(username));
     User user = userRepository.findByName(username);
 
     Word word = wordService.getNext();
@@ -58,12 +60,12 @@ public class HacktjApplication {
       
       return new ProblemResponse(
         word.getId(),
-        problemData.get("question").asText(),
-        problemData.get("correctAnswer").asText(),
-        choices,
-        word.getSkillLevel(),
-        problemData.get("ConjugationType").asText(),
-        problemData.get("Pronoun").asText()
+      problemData.get("question").asText(),
+      problemData.get("correctAnswer").asText(),
+      new String[0],
+      word.getSkillLevel() != null ? word.getSkillLevel() : "A1",
+      problemData.get("conjugationType").asText(),  
+      problemData.get("Pronoun").asText()    
       );
     }
     problemBuilder builder = new problemBuilder(word);
@@ -252,11 +254,13 @@ public class HacktjApplication {
 
   @GetMapping("/frq/problem")
   public ProblemResponse getProblemFRQ(@RequestParam(value = "username") String username) throws Exception {
-     User user = userRepository.findByName(username);
+    if(userRepository.findByName(username) == null)
+        userRepository.save(new User(username));
+    User user = userRepository.findByName(username);
 
     Word word = wordService.getNext();
     if (word == null) {
-      throw new Exception("No word found");
+      word = new Word("tener", "verb", "1", "to have", 1);
     }
 
     while(!word.getWordType().equals("verb")) {
@@ -273,11 +277,13 @@ public class HacktjApplication {
       String[] choices = mapper.convertValue(problemData.get("choices"), String[].class);
       
       return new ProblemResponse(
-        word.getId(),
-        problemData.get("question").asText(),
-        problemData.get("correctAnswer").asText(),
-        choices,
-        word.getSkillLevel()
+      word.getId(),
+      problemData.get("question").asText(),
+      problemData.get("correctAnswer").asText(),
+      new String[0],
+      word.getSkillLevel() != null ? word.getSkillLevel() : "A1",
+      problemData.get("conjugationType").asText(),  
+      problemData.get("Pronoun").asText()            
       );
     
     }
