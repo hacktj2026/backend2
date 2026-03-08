@@ -17,17 +17,25 @@ public class ConjugationBuilder extends Builder {
 
     public String problem(User u) throws Exception {
         String str;
+        String type;
         String prn = pronoun();
         if(u.skill < 50)
         {
             str = c.conjugatePresent(w, prn);
+            type = "Present";
         }
         else
         {
             if(Math.random() < 0.5)
+            {
                 str = c.conjugateConditional(w, prn);
+                type = "Conditional";
+            }
             else
+            {
                 str = c.conjugateFuture(w, prn);
+                type = "Future";
+            }
         }
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode problem = mapper.createObjectNode();
@@ -35,6 +43,7 @@ public class ConjugationBuilder extends Builder {
         problem.put("question", "Conjugate the verb '" + w.getWord() + "' in the " + prn + " form.");
         problem.put("correctAnswer", str);
         problem.putArray("choices");
+        problem.put("ConjugationType", type);
         return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(problem);
     }
 
