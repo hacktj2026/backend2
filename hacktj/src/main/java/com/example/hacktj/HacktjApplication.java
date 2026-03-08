@@ -11,7 +11,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.hacktj.model.Word;
+<<<<<<< HEAD
 import com.example.hacktj.model.problemBuilder;
+=======
+import com.example.hacktj.repository.UserRepository;
+import com.example.hacktj.repository.WordRepository;
+>>>>>>> bryan
 import com.example.hacktj.service.WordService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -22,11 +27,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class HacktjApplication {
   @Autowired
   WordService wordService;
+  @Autowired
+  WordRepository wordRepository;
+  @Autowired
+  UserRepository userRepository;
   public static void main(String[] args) {
     SpringApplication.run(HacktjApplication.class, args);
   }
 
-  // Get a new problem for a given level
   @GetMapping("/problem")
   public ProblemResponse getProblem(@RequestParam(value = "level", defaultValue = "1") int level) throws Exception {
     Word word = wordService.getNext(level);
@@ -37,6 +45,11 @@ public class HacktjApplication {
     
     problemBuilder builder = new problemBuilder(word);
     String problemJson = builder.problem();
+<<<<<<< HEAD
+=======
+    
+    ObjectMapper mapper = new ObjectMapper();
+>>>>>>> bryan
     var problemData = mapper.readTree(problemJson);
     
     
@@ -51,9 +64,9 @@ public class HacktjApplication {
     );
   }
 
-  // Check if the answer is correct
   @PostMapping("/check-answer")
   public AnswerResponse checkAnswer(@RequestBody AnswerRequest request) {
+<<<<<<< HEAD
     if (request == null || request.wordId == null) {
       return new AnswerResponse(false);
     }
@@ -64,6 +77,14 @@ public class HacktjApplication {
   }
 
   // Response DTOs
+=======
+    Word word = wordRepository.findByWord(request.getWordName());
+    boolean correct = word.getMeaning().equals(request.getSelected());
+    wordService.rightOrWrong(correct, word.getLevel(), userRepository.findByName(request.getUsername()));
+    return new AnswerResponse(correct);
+  }
+
+>>>>>>> bryan
   public static class ProblemResponse {
     public String wordId;
     public String question;
@@ -83,16 +104,21 @@ public class HacktjApplication {
   }
 
   public static class AnswerResponse {
+<<<<<<< HEAD
     public boolean correct;
 
     public AnswerResponse() {}
     
+=======
+    private boolean correct;
+>>>>>>> bryan
     public AnswerResponse(boolean correct) {
       this.correct = correct;
     }
   }
 
   public static class AnswerRequest {
+<<<<<<< HEAD
     public String wordId;
     public String selected;
     public String correctAnswer;
@@ -102,5 +128,13 @@ public class HacktjApplication {
     public void setWordId(String wordId) { this.wordId = wordId; }
     public void setSelected(String selected) { this.selected = selected; }
     public void setCorrectAnswer(String correctAnswer) { this.correctAnswer = correctAnswer; }
+=======
+    private String wordName;
+    private String selected;
+    private String username;
+    public String getWordName() { return wordName; }
+    public String getSelected() { return selected; }
+    public String getUsername() { return username; }
+>>>>>>> bryan
   }
 }
