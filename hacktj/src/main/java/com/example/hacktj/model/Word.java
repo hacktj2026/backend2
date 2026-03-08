@@ -27,6 +27,14 @@ public class Word
         this.level = level;
     }
 
+    public Word(String word)
+    {
+        this.word = word;
+        this.skillLevel = "";
+        this.wordType = "";
+        this.meaning = "";
+        this.level = 3;
+    }
 
     public void setId(String id) { this.id = id; }
     public String getId() { return id; }
