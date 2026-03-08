@@ -96,21 +96,25 @@ public class HacktjApplication {
          correctAnswer = Conjugation.conjugatePresent(word, request.getPronoun());
           correct = correctAnswer.equals(request.getSelected());
           wordService.rightOrWrong(correct, word.getLevel(), userRepository.findByName(request.getUsername()));
+          userRepository.findByName(request.getUsername()).updateSkill(word, correct);
           return new AnswerResponse(correct);
         case "future":
           correctAnswer = Conjugation.conjugateFuture(word, request.getPronoun());
           correct = correctAnswer.equals(request.getSelected());
           wordService.rightOrWrong(correct, word.getLevel(), userRepository.findByName(request.getUsername()));
+          userRepository.findByName(request.getUsername()).updateSkill(word, correct);
           return new AnswerResponse(correct);
         case "conditional":
           correctAnswer = Conjugation.conjugateConditional(word, request.getPronoun());
           correct = correctAnswer.equals(request.getSelected());
           wordService.rightOrWrong(correct, word.getLevel(), userRepository.findByName(request.getUsername()));
+          userRepository.findByName(request.getUsername()).updateSkill(word, correct);
           return new AnswerResponse(correct);
       }
     }
     correct = word.getMeaning().equals(request.getSelected());
     wordService.rightOrWrong(correct, word.getLevel(), userRepository.findByName(request.getUsername()));
+    userRepository.findByName(request.getUsername()).updateSkill(word, correct);
     return new AnswerResponse(correct);
   }
   @DeleteMapping("/users")
@@ -196,6 +200,7 @@ public class HacktjApplication {
     
     correct = word.getMeaning().equals(request.getSelected());
     wordService.rightOrWrong(correct, word.getLevel(), userRepository.findByName(request.getUsername()));
+    userRepository.findByName(request.getUsername()).updateSkill(word, correct);
     return new AnswerResponse(correct);
   }
 
@@ -212,16 +217,19 @@ public class HacktjApplication {
          correctAnswer = Conjugation.conjugatePresent(word, request.getPronoun());
           correct = correctAnswer.equals(request.getSelected());
           wordService.rightOrWrong(correct, word.getLevel(), userRepository.findByName(request.getUsername()));
+          userRepository.findByName(request.getUsername()).updateSkill(word, correct);
           return new AnswerResponse(correct);
         case "future":
           correctAnswer = Conjugation.conjugateFuture(word, request.getPronoun());
           correct = correctAnswer.equals(request.getSelected());
           wordService.rightOrWrong(correct, word.getLevel(), userRepository.findByName(request.getUsername()));
+          userRepository.findByName(request.getUsername()).updateSkill(word, correct);
           return new AnswerResponse(correct);
         case "conditional":
           correctAnswer = Conjugation.conjugateConditional(word, request.getPronoun());
           correct = correctAnswer.equals(request.getSelected());
           wordService.rightOrWrong(correct, word.getLevel(), userRepository.findByName(request.getUsername()));
+          userRepository.findByName(request.getUsername()).updateSkill(word, correct);
           return new AnswerResponse(correct);
       }
 
