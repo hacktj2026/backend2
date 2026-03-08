@@ -7,13 +7,16 @@ import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
-import com.example.hacktj.model.*;
-import com.example.hacktj.repository.*;
+import com.example.hacktj.model.User;
+import com.example.hacktj.model.Word;
+import com.example.hacktj.model.problemBuilder;
+import com.example.hacktj.repository.UserRepository;
+import com.example.hacktj.repository.WordRepository;
 
 import jakarta.annotation.PostConstruct;
 
@@ -103,7 +106,7 @@ public class WordService {
             if(word != null && Math.abs(convertSkillLevel(word.getSkillLevel()) - user.skill) < 10 && word.getLevel() == 1)
                 word.setLevel(2);
     }
-    private int convertSkillLevel(String skill) {
+    public int convertSkillLevel(String skill) {
         if(skill.equals("A1")) return 17;
         if(skill.equals("A2")) return 34;
         if(skill.equals("B1")) return 51;
