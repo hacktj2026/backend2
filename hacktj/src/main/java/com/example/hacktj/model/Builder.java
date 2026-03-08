@@ -5,7 +5,6 @@ public abstract class Builder {
     }
     abstract String problem() throws Exception;
     protected static int changeDiffLevel(String s) {
-        System.out.println(s);
         switch(s) {
             case "A1": return 0;
             case "A2": return 1;

@@ -22,7 +22,6 @@ public class problemBuilder extends Builder {
         Scanner scan = new Scanner(problemBuilder.class.getClassLoader().getResourceAsStream("vocabulary.txt"));
         while(scan.hasNextLine()) {
             String[] sarr = scan.nextLine().split(" ");
-            System.out.println(sarr[0]);
             vocabData[changeDiffLevel(sarr[2])].add(new Word(sarr[0], sarr[2], sarr[1], sarr[3], 1));
         }
     }
