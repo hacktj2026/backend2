@@ -4,6 +4,13 @@
             "type": "java",
             "name": "test",
             "request": "launch",
+            "mainClass": "com.example.hacktj.service.test",
+            "projectName": "hacktj"
+        },
+        {
+            "type": "java",
+            "name": "test",
+            "request": "launch",
             "mainClass": "com.example.hacktj.model.test",
             "projectName": "hacktj"
         },
