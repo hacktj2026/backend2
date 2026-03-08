@@ -253,11 +253,13 @@ public class HacktjApplication {
 
   @GetMapping("/frq/problem")
   public ProblemResponse getProblemFRQ(@RequestParam(value = "username") String username) throws Exception {
-     User user = userRepository.findByName(username);
+    if(userRepository.findByName(username) == null)
+        userRepository.save(new User(username));
+    User user = userRepository.findByName(username);
 
     Word word = wordService.getNext();
     if (word == null) {
-      throw new Exception("No word found");
+      word = new Word("tener", "verb", "1", "to have", 1);
     }
 
     while(!word.getWordType().equals("verb")) {
