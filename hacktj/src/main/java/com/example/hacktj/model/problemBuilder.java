@@ -17,14 +17,14 @@ public class problemBuilder extends Builder {
 
     public problemBuilder(Word word) {
         this.word = word;
-        if(vocabData[0] == null || vocabData[0].isEmpty()) {
-            for(int a = 0; a < vocabData.length; a++)
-                vocabData[a] = new ArrayList<>();
-            Scanner scan = new Scanner(problemBuilder.class.getClassLoader().getResourceAsStream("vocabulary.txt"));
-            while(scan.hasNextLine()) {
-                String[] sarr = scan.nextLine().split(" ");
-                vocabData[changeDiffLevel(sarr[2])].add(new Word(sarr[0], sarr[2], sarr[1], sarr[3], 1));
-            }
+        for(int a = 0; a < vocabData.length; a++)
+            vocabData[a] = new ArrayList<>();
+        Scanner scan = new Scanner(problemBuilder.class.getClassLoader().getResourceAsStream("vocabulary.txt"));
+        while(scan.hasNextLine()) {
+            String[] sarr = scan.nextLine().split(" ");
+            if(!sarr[3].toLowerCase().equals(sarr[3]))
+                sarr[3] = sarr[3].replaceAll("([A-Z])", " $1").trim().toLowerCase();
+            vocabData[changeDiffLevel(sarr[2])].add(new Word(sarr[0], sarr[2], sarr[1], sarr[3], 1));
         }
     }
 
@@ -36,7 +36,7 @@ public class problemBuilder extends Builder {
         List<String> pool = new ArrayList<>();
 
         for (Word w : vocabData[changeDiffLevel(difficulty)]) {
-            if (!w.getWord().equals(word.getWord()) && w.getWordType().equals(wordType)) {
+            if (!w.getWord().equals(word.getWord())) {
                 if(reversed)
                     pool.add(w.getWord());
                 else
