@@ -22,25 +22,21 @@ public class User {
     public int getSkill() {
         return skill;
     }
-
+    public String getName() { return name; }
     public int updateSkill(Word word, boolean isCorrect) {
+        System.out.println(skill);
         int WordSkill = skillNum(word.getSkillLevel());
         boolean bigger = WordSkill > skill;
-        int change = (int)Math.sqrt(WordSkill * WordSkill - skill * skill + 5)/2;
+        int change = (int)(WordSkill-skill);
+        if(isCorrect)
+            change = Math.max(change, 5);
         if(isCorrect) {
             if(bigger)
-             skill += change; 
+             skill += change * 1.5; 
             else
-             skill += Math.log(change);
-        } 
-        else {
-            if(bigger)
-             skill -= Math.log(change);
-            else
-              skill -= change;
+             skill += change;
         }
-        System.out.println(skill + " " + change);
-        System.out.println(WordSkill + " " + skill);
+        System.out.println(skill);
         return skill;
     }
 

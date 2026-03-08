@@ -116,7 +116,6 @@ public class HacktjApplication {
     }
     correct = word.getMeaning().equals(request.getSelected());
     wordService.rightOrWrong(correct, word.getLevel(), userRepository.findByName(request.getUsername()));
-    userRepository.findByName(request.getUsername()).updateSkill(word, correct);
     return new AnswerResponse(correct);
   }
   @DeleteMapping("/users")

@@ -7,14 +7,13 @@ import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
-import com.example.hacktj.model.User;
-import com.example.hacktj.model.Word;
-import com.example.hacktj.model.problemBuilder;
-import com.example.hacktj.repository.WordRepository;
+import com.example.hacktj.model.*;
+import com.example.hacktj.repository.*;
 
 import jakarta.annotation.PostConstruct;
 
@@ -24,6 +23,8 @@ public class WordService {
     MongoTemplate mongoTemplate;
     @Autowired
     WordRepository wordRepository;
+    @Autowired
+    UserRepository userRepository;
 
     int max = 50;
     Word last = null;
@@ -93,7 +94,10 @@ public class WordService {
         return word;
     }
     public void rightOrWrong(boolean answer, int level, User user) {
-        int skill = user.updateSkill(last, answer);
+        user.updateSkill(last, answer);
+        Query query = new Query(Criteria.where("name").is(user.getName()));
+        Update update = new Update().set("skill", user.skill);
+        mongoTemplate.updateFirst(query, update, User.class);
         List<Word> words = wordRepository.findByLevel(level);
         for(Word word : words)
             if(word != null && Math.abs(convertSkillLevel(word.getSkillLevel()) - user.skill) < 10 && word.getLevel() == 1)
