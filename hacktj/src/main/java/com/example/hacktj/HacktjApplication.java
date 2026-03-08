@@ -25,7 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootApplication
 @RestController
-@RequestMapping({"/api", "/api/mcq", "/api/frq"})
+@RequestMapping("/api")
 @CrossOrigin(origins = "*")
 public class HacktjApplication {
   @Autowired
