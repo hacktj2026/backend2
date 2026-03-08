@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 public class ConjugationBuilder extends Builder {
     Conjugation c;
     Word w;
+    String type;
     public ConjugationBuilder(Word wo) throws Exception {
         super();
         c = new Conjugation();
@@ -20,14 +21,21 @@ public class ConjugationBuilder extends Builder {
         String prn = pronoun();
         if(u.skill < 50)
         {
+            type = "present";
             str = c.conjugatePresent(w, prn);
         }
         else
         {
             if(Math.random() < 0.5)
+            {
+                type = "conditional";
                 str = c.conjugateConditional(w, prn);
+            }
             else
+            {
+                type = "future";
                 str = c.conjugateFuture(w, prn);
+            }
         }
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode problem = mapper.createObjectNode();
@@ -35,6 +43,7 @@ public class ConjugationBuilder extends Builder {
         problem.put("question", "Conjugate the verb '" + w.getWord() + "' in the " + prn + " form.");
         problem.put("correctAnswer", str);
         problem.putArray("choices");
+        problem.put("conjugationType", type);
         return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(problem);
     }
 
