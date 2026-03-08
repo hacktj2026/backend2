@@ -43,7 +43,7 @@ public class ConjugationBuilder extends Builder {
         problem.put("question", "Conjugate the verb '" + w.getWord() + "' in the " + prn + " form.");
         problem.put("correctAnswer", str);
         problem.putArray("choices");
-        problem.put("ConjugationType", type);
+        problem.put("conjugationType", type);
         problem.put("Pronoun", prn);
         return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(problem);
     }
