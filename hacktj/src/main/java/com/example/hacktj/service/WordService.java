@@ -43,7 +43,10 @@ public class WordService {
             wordRepository.save(new Word(sarr[0], sarr[2], sarr[1], sarr[3], 1));
         }
     }
-    public Word getNext(int level) {
+    public Word getNext() {
+        int level = 1;
+        if(Math.random() < wordRepository.findByLevel(2).size() / (wordRepository.findByLevel(1).size() + wordRepository.findByLevel(2).size()))
+            level = 2;
         Query countQuery = new Query(Criteria.where("level").is(level));
         long count = mongoTemplate.count(countQuery, Word.class);
         if (count == 0) {

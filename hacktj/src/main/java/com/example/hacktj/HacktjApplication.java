@@ -39,15 +39,15 @@ public class HacktjApplication {
   }
 
   @GetMapping("/problem")
-  public ProblemResponse getProblem(@RequestParam(value = "level", defaultValue = "1") int level, @RequestParam(value = "username") String username) throws Exception {
+  public ProblemResponse getProblem(@RequestParam(value = "username") String username) throws Exception {
     User user = userRepository.findByName(username);
 
-    Word word = wordService.getNext(level);
+    Word word = wordService.getNext();
     if (word == null) {
-      throw new Exception("No word found for level " + level);
+      throw new Exception("No word found");
     }
     ObjectMapper mapper = new ObjectMapper();
-    
+
     if(word.getWordType().equals("verb") && Math.random() < 0.5) {
       ConjugationBuilder builder = new ConjugationBuilder(word);
       String problemJson = builder.problem(user);
@@ -165,12 +165,12 @@ public class HacktjApplication {
   }
 
   @GetMapping("/mcq/problem")
-  public ProblemResponse getProblemMCQ(@RequestParam(value = "level", defaultValue = "1") int level, @RequestParam(value = "username") String username) throws Exception {
+  public ProblemResponse getProblemMCQ(@RequestParam(value = "username") String username) throws Exception {
      User user = userRepository.findByName(username);
 
-    Word word = wordService.getNext(level);
+    Word word = wordService.getNext();
     if (word == null) {
-      throw new Exception("No word found for level " + level);
+      throw new Exception("No word found");
     }
     ObjectMapper mapper = new ObjectMapper();
     
@@ -238,12 +238,12 @@ public class HacktjApplication {
   }
 
   @GetMapping("/frq/problem")
-  public ProblemResponse getProblemFRQ(@RequestParam(value = "level", defaultValue = "1") int level, @RequestParam(value = "username") String username) throws Exception {
+  public ProblemResponse getProblemFRQ(@RequestParam(value = "username") String username) throws Exception {
      User user = userRepository.findByName(username);
 
-    Word word = wordService.getNext(level);
+    Word word = wordService.getNext();
     if (word == null) {
-      throw new Exception("No word found for level " + level);
+      throw new Exception("No word found");
     }
     ObjectMapper mapper = new ObjectMapper();
     
