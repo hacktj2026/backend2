@@ -25,7 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootApplication
 @RestController
-@RequestMapping({"/api", "/api/mcq", "/api/frq"})
+@RequestMapping("/api")
 @CrossOrigin(origins = "*")
 public class HacktjApplication {
   @Autowired
@@ -258,6 +258,10 @@ public class HacktjApplication {
     Word word = wordService.getNext();
     if (word == null) {
       throw new Exception("No word found");
+    }
+
+    while(!word.getWordType().equals("verb")) {
+      word = wordService.getNext();
     }
     ObjectMapper mapper = new ObjectMapper();
     
