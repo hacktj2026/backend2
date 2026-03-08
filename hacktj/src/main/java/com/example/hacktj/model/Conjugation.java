@@ -72,7 +72,7 @@ public class Conjugation {
             case "saber": wordStr = "sabr"; break;
             case "caber": wordStr = "cabr"; break;
             case "valer": wordStr = "valdr"; break;
-            default: wordStr = wordStr.substring(0, wordStr.length() - 2); break;
+            default: wordStr = wordStr.substring(0, wordStr.length()); break;
         }
 
         String ending = "";
@@ -105,7 +105,7 @@ public class Conjugation {
             case "saber": wordStr = "sabr"; break;
             case "caber": wordStr = "cabr"; break;
             case "valer": wordStr = "valdr"; break;
-            default: wordStr = wordStr.substring(0, wordStr.length() - 2); break;
+            default: wordStr = wordStr.substring(0, wordStr.length()); break;
         }
 
         String ending = "";
