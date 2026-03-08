@@ -46,11 +46,9 @@ public class WordService {
     public Word getNext(int level) {
         Query countQuery = new Query(Criteria.where("level").is(level));
         long count = mongoTemplate.count(countQuery, Word.class);
-        
         if (count == 0) {
             return null;
         }
-        
         int randomIndex = (int)(Math.random() * count);
         Query query = new Query(Criteria.where("level").is(level));
         query.skip(randomIndex);
@@ -64,7 +62,11 @@ public class WordService {
             query.limit(1);
             word = mongoTemplate.findOne(query, Word.class);
         }
-        
+        if(level == 2) {
+            word.setTimesUsed(word.getTimesUsed() + 1);
+            if(word.getTimesUsed() > 5)
+                word.setLevel(3);
+        }
         last = word;
         return word;
     }
@@ -72,8 +74,8 @@ public class WordService {
         int skill = user.updateSkill(last, answer);
         List<Word> words = wordRepository.findByLevel(level);
         for(Word word : words)
-            if(word != null && convertSkillLevel(word.getSkillLevel()) < skill)
-                wordRepository.delete(word);
+            if(word != null && convertSkillLevel(word.getSkillLevel()) < skill && word.getLevel() == 1)
+                word.setLevel(2);
         addWords();
     }
     private int convertSkillLevel(String skill) {
