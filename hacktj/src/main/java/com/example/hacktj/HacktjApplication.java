@@ -278,4 +278,9 @@ public class HacktjApplication {
       );
     
     }
+  @GetMapping("/test")
+    public String test() {
+        wordService.test();
+        return "done";
+    }
 }

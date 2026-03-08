@@ -38,13 +38,17 @@ public class WordService {
             Scanner scan = new Scanner(problemBuilder.class.getClassLoader().getResourceAsStream("vocabulary.txt"));
             while(scan.hasNextLine()) {
                 String[] sarr = scan.nextLine().split(" ");
-                vocabData[convertSkillLevel(sarr[2])].add(new Word(sarr[0], sarr[2], sarr[1], sarr[3], 1));
+                vocabData[convertSkillString(sarr[2])].add(new Word(sarr[0], sarr[2], sarr[1], sarr[3], 1));
             }
             addWords(0);
         }
         catch(Exception e) {
-            System.out.println("Error");
+            System.out.println(e.toString());
         }
+    }
+    public void test() {
+        for(Word word : wordRepository.findByLevel(1))
+            System.out.println(word.getWord());
     }
     public void addWords(int skill) {
         List<Word> words = vocabData[convertSkillString(skill)];
@@ -116,6 +120,16 @@ public class WordService {
         if(skill < 68) return 3;
         if(skill < 85) return 4;
         return 5;
+    }
+    private int convertSkillString(String skill) {
+        switch(skill) {
+            case "A1": return 0;
+            case "A2": return 1;
+            case "B1": return 2;
+            case "B2": return 3;
+            case "C1": return 4;
+            default: return 5;
+        }
     }
     public void setMax(int max) { this.max = max; }
     public void recordAnswer(String wordId, boolean correct) {
