@@ -14,24 +14,17 @@ public class problemBuilder extends Builder {
     boolean reversed = Math.random() < 0.5;
     private static final ObjectMapper mapper = new ObjectMapper();
     private static List<Word>[] vocabData = new ArrayList[6];
-    static {
-        try {
-            for(int a = 0; a < vocabData.length; a++)
-                vocabData[a] = new ArrayList<>();
-            Scanner scan = new Scanner(problemBuilder.class.getClassLoader().getResourceAsStream("vocabulary.txt"));
-            while(scan.hasNextLine()) {
-                String[] sarr = scan.nextLine().split(" ");
-                System.out.println(sarr[0]);
-                vocabData[changeDiffLevel(sarr[2])].add(new Word(sarr[0], sarr[2], sarr[1], sarr[3], 1));
-            }
-        }
-        catch(Exception e) {
-            System.out.println(e.toString());
-        }
-    }
-    
+
     public problemBuilder(Word word) {
         this.word = word;
+        for(int a = 0; a < vocabData.length; a++)
+            vocabData[a] = new ArrayList<>();
+        Scanner scan = new Scanner(problemBuilder.class.getClassLoader().getResourceAsStream("vocabulary.txt"));
+        while(scan.hasNextLine()) {
+            String[] sarr = scan.nextLine().split(" ");
+            System.out.println(sarr[0]);
+            vocabData[changeDiffLevel(sarr[2])].add(new Word(sarr[0], sarr[2], sarr[1], sarr[3], 1));
+        }
     }
 
     @Override
