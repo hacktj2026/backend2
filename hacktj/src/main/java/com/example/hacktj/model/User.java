@@ -24,7 +24,6 @@ public class User {
     }
     public String getName() { return name; }
     public int updateSkill(Word word, boolean isCorrect) {
-        System.out.println(skill);
         int WordSkill = skillNum(word.getSkillLevel());
         boolean bigger = WordSkill > skill;
         int change = (int)(WordSkill-skill);
@@ -36,7 +35,7 @@ public class User {
             else
              skill += change;
         }
-        System.out.println(skill);
+        skill = Math.min(skill, 100);
         return skill;
     }
 
