@@ -1,14 +1,18 @@
 package com.example.hacktj.service;
 
+import java.util.List;
+import java.util.Scanner;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
+
+import com.example.hacktj.model.User;
 import com.example.hacktj.model.Word;
 import com.example.hacktj.repository.WordRepository;
-import java.util.*;
-import com.example.hacktj.model.User;
+
 import jakarta.annotation.PostConstruct;
 
 @Service
@@ -68,7 +72,7 @@ public class WordService {
         int skill = user.updateSkill(last, answer);
         List<Word> words = wordRepository.findByLevel(level);
         for(Word word : words)
-            if(convertSkillLevel(word.getSkillLevel()) < skill)
+            if(word != null && convertSkillLevel(word.getSkillLevel()) < skill)
                 wordRepository.delete(word);
         addWords();
     }
