@@ -1,14 +1,15 @@
-package com.example.hacktj;
+package com.example.hacktj.model;
 
-import com.example.hacktj.model.Word;
-import com.fasterxml.jackson.databind.JsonNode;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Scanner;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import java.util.*;
-
-public class problemBuilder {
+public class problemBuilder extends Builder {
     Word word;
     boolean reversed = Math.random() < 0.5;
     private static final ObjectMapper mapper = new ObjectMapper();
@@ -28,22 +29,12 @@ public class problemBuilder {
             System.out.println(e.toString());
         }
     }
-    private static int changeDiffLevel(String s) {
-        System.out.println(s);
-        switch(s) {
-            case "A1": return 0;
-            case "A2": return 1;
-            case "B1": return 2;
-            case "B2": return 3;
-            case "C1": return 4;
-            case "C2": return 5;
-            default: return -1;
-        }
-    }
+    
     public problemBuilder(Word word) {
         this.word = word;
     }
 
+    @Override
     public String problem() throws Exception {
         String difficulty = word.getSkillLevel();
         String wordType = word.getWordType();
