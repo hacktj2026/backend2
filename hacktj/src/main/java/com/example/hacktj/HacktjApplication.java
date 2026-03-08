@@ -51,7 +51,7 @@ public class HacktjApplication {
 
   @PostMapping("/check-answer")
   public AnswerResponse checkAnswer(@RequestBody AnswerRequest request) {
-    Word word = wordRepository.findByName(request.getWordName());
+    Word word = wordRepository.findByWord(request.getWordName());
     boolean correct = word.getMeaning().equals(request.getSelected());
     wordService.rightOrWrong(correct, word.getLevel(), userRepository.findByName(request.getUsername()));
     return new AnswerResponse(correct);
