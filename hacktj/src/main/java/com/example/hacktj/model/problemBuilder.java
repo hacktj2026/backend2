@@ -36,7 +36,10 @@ public class problemBuilder extends Builder {
 
         for (Word w : vocabData[changeDiffLevel(difficulty)]) {
             if (!w.getWord().equals(word.getWord()) && w.getWordType().equals(wordType)) {
-                pool.add(w.getMeaning());
+                if(reversed)
+                    pool.add(w.getWord());
+                else
+                    pool.add(w.getMeaning());
             }
         }
         Collections.shuffle(pool);
