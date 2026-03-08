@@ -40,6 +40,8 @@ public class HacktjApplication {
 
   @GetMapping("/problem")
   public ProblemResponse getProblem(@RequestParam(value = "username") String username) throws Exception {
+    if(userRepository.findByName(username) == null)
+        userRepository.save(new User(username));
     User user = userRepository.findByName(username);
 
     Word word = wordService.getNext();
