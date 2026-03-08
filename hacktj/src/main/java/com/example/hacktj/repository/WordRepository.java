@@ -8,7 +8,6 @@ import com.example.hacktj.model.Word;
 
 public interface WordRepository extends MongoRepository<Word, String>
 {
-	Word findWordByName(String word);
 	List<Word> findByLevel(int level);
 	
 	public long count();
