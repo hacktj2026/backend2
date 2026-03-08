@@ -12,7 +12,12 @@ public class User {
         password = "";
         email = "";
     }
-
+    public User(String name) {
+        skill = 0;
+        this.name = name;
+        password = "";
+        email = "";
+    }
     public User(String name, String password) {
         this.name = name;
         this.password = password;
