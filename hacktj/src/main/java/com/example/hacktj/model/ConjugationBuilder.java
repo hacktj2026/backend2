@@ -44,6 +44,7 @@ public class ConjugationBuilder extends Builder {
         problem.put("correctAnswer", str);
         problem.putArray("choices");
         problem.put("ConjugationType", type);
+        problem.put("Pronoun", prn);
         return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(problem);
     }
 
