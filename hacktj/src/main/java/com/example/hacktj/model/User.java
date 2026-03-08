@@ -12,7 +12,11 @@ public class User {
         skill = 0;
         this.name = name;
     }
-
+    public User(String name, int skill) {
+        this.skill = skill;
+        this.name = name;
+    }
+    
     public int getSkill() {
         return skill;
     }

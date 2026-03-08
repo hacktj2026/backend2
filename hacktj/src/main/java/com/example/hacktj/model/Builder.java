@@ -1,6 +1,8 @@
 package com.example.hacktj.model;
 
 public abstract class Builder {
+    public Builder() {
+    }
     abstract String problem() throws Exception;
     protected static int changeDiffLevel(String s) {
         System.out.println(s);
