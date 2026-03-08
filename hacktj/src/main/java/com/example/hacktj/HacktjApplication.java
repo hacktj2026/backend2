@@ -4,7 +4,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,9 +25,6 @@ import com.example.hacktj.repository.UserRepository;
 import com.example.hacktj.repository.WordRepository;
 import com.example.hacktj.service.WordService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Criteria;
 
 @SpringBootApplication
 @RestController
@@ -118,7 +117,7 @@ public class HacktjApplication {
         break;
     }
 
-    Query query = new Query(Criteria.where("email").is(username));
+  
     wordService.rightOrWrong(correct, lvl, mongoTemplate.findOne(query, User.class));
   
     return new AnswerResponse(correct);
@@ -212,7 +211,7 @@ public class HacktjApplication {
 
     @PostMapping("/mcq/check-answer")
   public AnswerResponse checkAnswerMCQ(@RequestBody AnswerRequest request) {
-    Query query = new Query(Criteria.where("email").is(username));
+    Query query = new Query(Criteria.where("email").is(request.getUsername()));
      User user = mongoTemplate.findOne(query, User.class);
     Word word = wordRepository.findByWord(request.getWordName());
     boolean correct;
@@ -225,7 +224,7 @@ public class HacktjApplication {
 
   @PostMapping("/frq/check-answer")
   public AnswerResponse checkAnswerFRQ(@RequestBody AnswerRequest request) {
-    Query query = new Query(Criteria.where("email").is(username));
+    Query query = new Query(Criteria.where("email").is(request.getUsername()));
      User user = mongoTemplate.findOne(query, User.class);
     Word word = wordRepository.findByWord(request.getWordName());
     boolean correct = false;
