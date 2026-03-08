@@ -10,6 +10,7 @@ import java.util.*;
 
 public class problemBuilder {
     Word word;
+    boolean reversed = Math.random() < 0.5;
     private static final ObjectMapper mapper = new ObjectMapper();
     private static List<Word>[] vocabData = new ArrayList[6];
     static {
@@ -58,12 +59,22 @@ public class problemBuilder {
         List<String> wrongAnswers = pool.subList(0, Math.min(3, pool.size()));
 
         List<String> choices = new ArrayList<>(wrongAnswers);
-        choices.add(word.getMeaning());
+        if(reversed) {
+            choices.add(word.getWord());
+        } else {
+            choices.add(word.getMeaning());
+        }
         Collections.shuffle(choices);
 
         ObjectNode problem = mapper.createObjectNode();
-        problem.put("question", "What is the meaning of: " + word.getWord() + "?");
-        problem.put("correctAnswer", word.getMeaning());
+        if (reversed) {
+            problem.put("question", "How do you say in Spanish: " + word.getMeaning() + "?");
+            problem.put("correctAnswer", word.getWord());
+        } else {
+            problem.put("question", "What is the meaning of: " + word.getWord() + "?");
+            problem.put("correctAnswer", word.getMeaning());
+        }
+
         problem.put("skillLevel", difficulty);
         problem.put("wordType", wordType);
 
