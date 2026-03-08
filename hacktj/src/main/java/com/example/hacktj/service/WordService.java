@@ -103,10 +103,8 @@ public class WordService {
         mongoTemplate.updateFirst(query, update, User.class);
         List<Word> words = wordRepository.findByLevel(level);
         for(Word word : words)
-            if(word != null && Math.abs(convertSkillLevel(word.getSkillLevel()) - user.skill) < 10 && word.getLevel() == 1)
-            {
+            if(word != null && Math.abs(convertSkillLevel(word.getSkillLevel()) - user.skill) < 20 && word.getLevel() == 1)
                 word.setLevel(2);
-            }
     }
     public int convertSkillLevel(String skill) {
         if(skill.equals("A1")) return 17;
